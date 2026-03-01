@@ -149,8 +149,8 @@ class PosterGenerator {
       // 7. 绘制激励语
       this.drawQuote(ctx, quote);
       
-      // 8. 绘制底部信息和二维码
-      this.drawFooter(ctx, qrCodePath);
+      // 8. 绘制底部信息和二维码（使用await等待图片加载）
+      await this.drawFooter(ctx, qrCodePath);
 
       // 9. 生成图片
       if (isOffscreen) {
@@ -428,8 +428,9 @@ class PosterGenerator {
    * 绘制底部信息和二维码
    * @param {Object} ctx - Canvas 上下文
    * @param {string} qrCodePath - 二维码本地路径（可选）
+   * @returns {Promise} 绘制完成的Promise
    */
-  drawFooter(ctx, qrCodePath = null) {
+  async drawFooter(ctx, qrCodePath = null) {
     const y = 1050;
     
     ctx.save();
@@ -455,10 +456,14 @@ class PosterGenerator {
     this.drawRoundRect(ctx, qrX - 8, qrY - 8, qrSize + 16, qrSize + 16, 12, '#ffffff');
     
     if (qrCodePath) {
-      // 绘制下载的二维码图片
       try {
-        // 微信小程序 Canvas 2D 支持 drawImage 传入本地路径
-        ctx.drawImage(qrCodePath, qrX, qrY, qrSize, qrSize);
+        // 使用 getImageInfo 获取图片信息并绘制
+        const imgInfo = await this.getImageInfo(qrCodePath);
+        if (imgInfo && imgInfo.path) {
+          ctx.drawImage(imgInfo.path, qrX, qrY, qrSize, qrSize);
+        } else {
+          this.drawQRFallback(ctx, qrX, qrY, qrSize);
+        }
       } catch (e) {
         console.warn('绘制二维码图片失败:', e);
         this.drawQRFallback(ctx, qrX, qrY, qrSize);
@@ -469,6 +474,21 @@ class PosterGenerator {
     }
     
     ctx.restore();
+  }
+
+  /**
+   * 获取图片信息（Promise封装）
+   * @param {string} src - 图片路径
+   * @returns {Promise} 图片信息
+   */
+  getImageInfo(src) {
+    return new Promise((resolve, reject) => {
+      wx.getImageInfo({
+        src: src,
+        success: (res) => resolve(res),
+        fail: (err) => reject(err)
+      });
+    });
   }
 
   /**
