@@ -1,0 +1,111 @@
+<!--pages/statistics/statistics.wxml-->
+<view class="container">
+  <!-- 总体统计卡片 -->
+  <view class="overview-card">
+    <view class="overview-title">总体数据</view>
+    <view class="overview-grid">
+      <view class="overview-item">
+        <view class="overview-value">{{totalGoals}}</view>
+        <view class="overview-label">总目标数</view>
+      </view>
+      <view class="overview-item">
+        <view class="overview-value">{{completedGoals}}</view>
+        <view class="overview-label">已完成</view>
+      </view>
+      <view class="overview-item">
+        <view class="overview-value">{{completionRate}}%</view>
+        <view class="overview-label">完成率</view>
+      </view>
+      <view class="overview-item">
+        <view class="overview-value">{{totalPoints}}</view>
+        <view class="overview-label">总积分</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 连续打卡 -->
+  <view class="streak-card">
+    <view class="streak-icon">🔥</view>
+    <view class="streak-info">
+      <view class="streak-value">{{currentStreak}} 天</view>
+      <view class="streak-label">当前连续打卡</view>
+    </view>
+    <view class="streak-divider"></view>
+    <view class="streak-info">
+      <view class="streak-value">{{maxStreak}} 天</view>
+      <view class="streak-label">最长连续打卡</view>
+    </view>
+  </view>
+
+  <!-- 本周/本月统计 -->
+  <view class="period-stats">
+    <view class="period-tabs">
+      <view 
+        class="period-tab {{period === 'week' ? 'active' : ''}}" 
+        bindtap="switchPeriod"
+        data-period="week"
+      >本周</view>
+      <view 
+        class="period-tab {{period === 'month' ? 'active' : ''}}" 
+        bindtap="switchPeriod"
+        data-period="month"
+      >本月</view>
+    </view>
+
+    <view class="period-content">
+      <view class="period-item">
+        <view class="period-label">打卡天数</view>
+        <view class="period-bar">
+          <view class="period-fill" style="width: {{periodStats.checkInRate}}%"></view>
+        </view>
+        <view class="period-value">{{periodStats.checkInDays}}/{{periodStats.totalDays}} 天</view>
+      </view>
+
+      <view class="period-item">
+        <view class="period-label">完成目标</view>
+        <view class="period-bar">
+          <view class="period-fill" style="width: {{periodStats.goalRate}}%"></view>
+        </view>
+        <view class="period-value">{{periodStats.completedGoals}} 个</view>
+      </view>
+
+      <view class="period-item"
+>
+        <view class="period-label">获得积分</view>
+        <view class="period-value highlight">+{{periodStats.points}} pt</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成就徽章 -->
+  <view class="achievements">
+    <view class="achievements-title">成就徽章</view>
+    <view class="badges-grid">
+      <view 
+        wx:for="{{badges}}" 
+        wx:key="id" 
+        class="badge-item {{item.unlocked ? 'unlocked' : 'locked'}}"
+      >
+        <view class="badge-icon">{{item.icon}}</view>
+        <view class="badge-name">{{item.name}}</view>
+        <view wx:if="{{item.unlocked}}" class="badge-status">已解锁</view>
+        <view wx:else class="badge-status">未解锁</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 生成海报按钮 -->
+  <view class="poster-section">
+    <view class="poster-title">分享我的成就</view>
+    <button class="btn-poster" bindtap="generatePoster">
+      <text>生成打卡海报</text>
+    </button>
+    <view class="poster-hint">生成精美海报，保存到相册分享</view>
+  </view>
+
+  <!-- Canvas（用于生成海报，默认隐藏） -->
+  <canvas 
+    canvas-id="posterCanvas" 
+    style="width: 750px; height: 1200px; position: absolute; left: -9999px;"
+  ></canvas>
+</view>

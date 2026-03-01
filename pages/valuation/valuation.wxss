@@ -1,0 +1,267 @@
+/* 估值页面样式 - iOS深色星空风格 */
+.container {
+  padding: 40rpx 30rpx;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-top: 40rpx;
+  margin-bottom: 40rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 16rpx;
+  text-shadow: 0 2rpx 20rpx rgba(0, 122, 255, 0.5);
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+/* 愿望信息 */
+.wish-info {
+  width: 100%;
+  background: rgba(30, 35, 60, 0.6);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  border-radius: 32rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-sizing: border-box;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+}
+
+.wish-text {
+  font-size: 32rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  margin-bottom: 16rpx;
+  line-height: 1.5;
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.task-type-icon {
+  font-size: 32rpx;
+}
+
+/* 评估结果 */
+.result-card {
+  width: 100%;
+  background: rgba(30, 35, 60, 0.6);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 2rpx solid rgba(0, 122, 255, 0.3);
+  border-radius: 40rpx;
+  padding: 50rpx 40rpx;
+  margin-bottom: 40rpx;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0 8rpx 32rpx rgba(0, 122, 255, 0.2);
+}
+
+.result-label {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 20rpx;
+  font-weight: 600;
+}
+
+.result-value {
+  font-size: 72rpx;
+  font-weight: bold;
+  color: #007AFF;
+  margin-bottom: 20rpx;
+  text-shadow: 0 0 40rpx rgba(0, 122, 255, 0.5);
+}
+
+.result-desc {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* 建议列表 */
+.suggestions {
+  width: 100%;
+  margin-bottom: 40rpx;
+}
+
+.suggestion-title {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20rpx;
+  font-weight: 600;
+}
+
+.suggestion-item {
+  background: rgba(30, 35, 60, 0.5);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 16rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+}
+
+.suggestion-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+/* 按钮 */
+.btn-confirm {
+  width: 100%;
+  padding: 32rpx;
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  color: white;
+  border: none;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 122, 255, 0.4);
+  transition: all 0.3s;
+}
+
+.btn-confirm:active {
+  transform: scale(0.96);
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+/* 雷达动画 */
+.radar-container {
+  position: relative;
+  width: 300rpx;
+  height: 300rpx;
+  margin: 40rpx auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radar-circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4rpx solid rgba(0, 122, 255, 0.3);
+  border-radius: 50%;
+  animation: radar-pulse 2s ease-out infinite;
+}
+
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.price-display {
+  font-size: 72rpx;
+  font-weight: bold;
+  color: #007AFF;
+  z-index: 10;
+  text-shadow: 0 0 40rpx rgba(0, 122, 255, 0.5);
+}
+
+.price-display.locked {
+  color: #5856D6;
+  text-shadow: 0 0 40rpx rgba(88, 86, 214, 0.5);
+}
+
+/* 投票日志 */
+.vote-log {
+  position: relative;
+  height: 200rpx;
+  margin: 20rpx 0;
+  overflow: hidden;
+}
+
+.vote-bubble {
+  position: absolute;
+  padding: 12rpx 24rpx;
+  background: rgba(30, 35, 60, 0.8);
+  backdrop-filter: blur(10rpx);
+  -webkit-backdrop-filter: blur(10rpx);
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  animation: float-up 3s ease-out forwards;
+}
+
+@keyframes float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100rpx);
+  }
+}
+
+/* 底部 */
+.footer {
+  width: 100%;
+  margin-top: auto;
+  padding-bottom: 40rpx;
+}
+
+.status {
+  text-align: center;
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 20rpx;
+}
+
+.btn {
+  width: 100%;
+  padding: 30rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  color: white;
+  box-shadow: 0 8rpx 32rpx rgba(0, 122, 255, 0.4);
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+.btn-disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+}

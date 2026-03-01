@@ -1,0 +1,898 @@
+/* pages/daily-log/daily-log.wxss - iOS深色星空风格 */
+
+page {
+  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
+  min-height: 100vh;
+}
+
+.container {
+  padding: 20rpx 30rpx 160rpx;
+  box-sizing: border-box;
+}
+
+/* ========== 步骤指示器 ========== */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.step-num {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  transition: all 0.3s;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.step-text {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.step.active .step-num {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  color: white;
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.4);
+  border-color: transparent;
+}
+
+.step.active .step-text {
+  color: #007AFF;
+  font-weight: 600;
+}
+
+.step.completed .step-num {
+  background: #34C759;
+  color: white;
+  border-color: transparent;
+}
+
+.step-line {
+  width: 60rpx;
+  height: 3rpx;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 10rpx 20rpx;
+  transition: all 0.3s;
+}
+
+.step-line.active {
+  background: linear-gradient(90deg, #007AFF, #5856D6);
+}
+
+/* ========== 胶囊信息卡片 ========== */
+.capsule-card {
+  background: rgba(30, 35, 60, 0.6);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 32rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+}
+
+.capsule-wish {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 20rpx;
+  line-height: 1.5;
+}
+
+.capsule-progress {
+  margin-top: 10rpx;
+}
+
+.progress-bar {
+  height: 16rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-bottom: 12rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #007AFF, #5856D6);
+  border-radius: 8rpx;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: right;
+  font-weight: 500;
+}
+
+/* ========== 步骤内容区 ========== */
+.step-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 12rpx;
+  text-align: center;
+}
+
+.section-subtitle {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+/* ========== 步骤0: 选择行动类型 ========== */
+.task-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.task-type-card {
+  background: rgba(30, 35, 60, 0.5);
+  border-radius: 24rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+}
+
+.task-type-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.task-type-card:active {
+  transform: scale(0.98);
+  background: rgba(30, 35, 60, 0.7);
+}
+
+.task-type-card.selected {
+  border-width: 2rpx;
+  border-color: #007AFF;
+  background: rgba(0, 122, 255, 0.15);
+  box-shadow: 0 8rpx 30rpx rgba(0, 122, 255, 0.25);
+}
+
+.task-icon-bg {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.task-icon {
+  font-size: 44rpx;
+  pointer-events: none;
+}
+
+.task-info {
+  flex: 1;
+  min-width: 0;
+  pointer-events: none;
+}
+
+.task-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+  margin-bottom: 6rpx;
+  pointer-events: none;
+}
+
+.task-desc {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.selected-mark {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  width: 36rpx;
+  height: 36rpx;
+  background: linear-gradient(135deg, #34C759, #30D158);
+  border-radius: 50%;
+  color: white;
+  font-size: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 2rpx 8rpx rgba(52, 199, 89, 0.4);
+}
+
+/* ========== 步骤1: 选择具体行动 ========== */
+.selected-type-banner {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+  background: rgba(0, 122, 255, 0.1);
+  border: 1rpx solid rgba(0, 122, 255, 0.2);
+}
+
+.banner-icon {
+  font-size: 40rpx;
+}
+
+.banner-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.action-card {
+  background: rgba(30, 35, 60, 0.5);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.action-card:active {
+  transform: scale(0.96);
+}
+
+.action-card.selected {
+  border-color: #007AFF;
+  background: rgba(0, 122, 255, 0.15);
+  box-shadow: 0 8rpx 30rpx rgba(0, 122, 255, 0.25);
+}
+
+.action-card.custom {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.action-card.custom.selected {
+  background: rgba(0, 122, 255, 0.15);
+}
+
+.action-icon {
+  width: 88rpx;
+  height: 88rpx;
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.3);
+  pointer-events: none;
+}
+
+.action-card.custom .action-icon {
+  background: linear-gradient(135deg, #5856D6, #AF52DE);
+  box-shadow: 0 8rpx 24rpx rgba(88, 86, 214, 0.3);
+}
+
+/* ========== 自定义输入框 ========== */
+.custom-input-section {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  background: rgba(0, 122, 255, 0.08);
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(0, 122, 255, 0.15);
+}
+
+.custom-input-section .input-wrapper {
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.custom-input {
+  flex: 1;
+  height: 88rpx;
+  background: rgba(30, 35, 60, 0.8);
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  line-height: 88rpx;
+}
+
+.custom-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.custom-input:focus {
+  border-color: #007AFF;
+  box-shadow: 0 0 0 4rpx rgba(0, 122, 255, 0.15);
+}
+
+.add-btn {
+  width: 120rpx;
+  height: 88rpx;
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.3);
+}
+
+.add-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 12rpx rgba(0, 122, 255, 0.2);
+}
+
+.action-info {
+  width: 100%;
+  pointer-events: none;
+}
+
+.action-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+  margin-bottom: 8rpx;
+  pointer-events: none;
+}
+
+.action-desc {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+/* ========== 步骤2: 手动输入描述 ========== */
+.selected-action-preview {
+  background: rgba(0, 122, 255, 0.1);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+  border: 1rpx solid rgba(0, 122, 255, 0.2);
+}
+
+.preview-icon {
+  width: 72rpx;
+  height: 72rpx;
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+.preview-info {
+  flex: 1;
+}
+
+.preview-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.preview-desc {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-section {
+  background: rgba(30, 35, 60, 0.5);
+  border-radius: 24rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.input-label {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.input-label text {
+  color: #007AFF;
+  margin-right: 8rpx;
+}
+
+.input-wrapper {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16rpx;
+  padding: 20rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+}
+
+.input-wrapper:focus-within {
+  border-color: #007AFF;
+  background: rgba(0, 122, 255, 0.05);
+}
+
+.description-input {
+  width: 100%;
+  min-height: 160rpx;
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.description-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.char-count {
+  text-align: right;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 12rpx;
+}
+
+/* ========== 快捷标签 ========== */
+.quick-tags {
+  margin-top: 30rpx;
+}
+
+.tag-label {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  border-radius: 30rpx;
+  padding: 16rpx 28rpx;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s;
+}
+
+.tag-item:active {
+  transform: scale(0.95);
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  color: white;
+  border-color: transparent;
+}
+
+/* ========== 步骤3: 回答问题 ========== */
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+  padding-bottom: 40rpx;
+}
+
+.question-item {
+  background: rgba(30, 35, 60, 0.5);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.question-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.question-number {
+  width: 44rpx;
+  height: 44rpx;
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 50%;
+  color: white;
+  font-size: 24rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2rpx 8rpx rgba(0, 122, 255, 0.4);
+}
+
+.question-text {
+  font-size: 30rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+}
+
+.option-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16rpx;
+  padding: 24rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s;
+  min-height: 100rpx;
+  justify-content: center;
+}
+
+.option-icon {
+  font-size: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.option-card:active {
+  transform: scale(0.96);
+}
+
+.option-card.selected {
+  background: rgba(0, 122, 255, 0.15);
+  border-color: #007AFF;
+}
+
+.option-text {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.3;
+  word-break: break-all;
+}
+
+.score-preview {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-top: 30rpx;
+  margin-bottom: 60rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 122, 255, 0.35);
+}
+
+.score-label {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.score-value {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: white;
+}
+
+/* ========== 步骤4: 确认提交 ========== */
+.summary-card {
+  background: rgba(30, 35, 60, 0.5);
+  border-radius: 28rpx;
+  padding: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-section {
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-section:last-child {
+  border-bottom: none;
+}
+
+.summary-section.highlight {
+  background: rgba(0, 122, 255, 0.1);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin: 20rpx 0 0;
+  border: 1rpx solid rgba(0, 122, 255, 0.15);
+}
+
+.summary-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.summary-value-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.summary-icon {
+  width: 56rpx;
+  height: 56rpx;
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+.summary-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.summary-desc-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12rpx;
+  padding: 20rpx;
+}
+
+.summary-desc {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+.answers-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.answer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.answer-row:last-child {
+  border-bottom: none;
+}
+
+.answer-q {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.6);
+  flex: 1;
+}
+
+.answer-a {
+  font-size: 26rpx;
+  color: #007AFF;
+  font-weight: 600;
+}
+
+.summary-score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-score {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #007AFF;
+}
+
+.summary-progress {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ========== 底部按钮 ========== */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24rpx 32rpx calc(32rpx + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgba(10, 14, 39, 0.98) 60%, rgba(10, 14, 39, 0.7));
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  display: flex;
+  gap: 24rpx;
+  box-shadow: 0 -4rpx 30rpx rgba(0, 0, 0, 0.3);
+  border-top: 1rpx solid rgba(255, 255, 255, 0.05);
+}
+
+.btn {
+  flex: 1;
+  padding: 28rpx 0;
+  border-radius: 24rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  line-height: 1.2;
+}
+
+/* 上一步按钮 - 玻璃拟态风格 */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary::before {
+  content: '←';
+  font-size: 28rpx;
+  margin-right: 4rpx;
+}
+
+.btn-secondary:active {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(2rpx);
+}
+
+/* 下一步/提交按钮 - 渐变霓虹风格 */
+.btn-primary {
+  background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+  color: white;
+  box-shadow: 0 8rpx 28rpx rgba(0, 122, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-primary:active::after {
+  left: 100%;
+}
+
+.btn-primary:active {
+  transform: translateY(2rpx) scale(0.98);
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+.btn-primary[disabled] {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  box-shadow: none;
+  opacity: 0.5;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* 提交按钮 - 成功绿渐变 */
+.btn-success {
+  background: linear-gradient(135deg, #34C759 0%, #30D158 100%);
+  color: white;
+  box-shadow: 0 8rpx 28rpx rgba(52, 199, 89, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-success::before {
+  content: '✓';
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-right: 4rpx;
+}
+
+.btn-success::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-success:active::after {
+  left: 100%;
+}
+
+.btn-success:active {
+  transform: translateY(2rpx) scale(0.98);
+  box-shadow: 0 4rpx 16rpx rgba(52, 199, 89, 0.3);
+}
+
+/* ========== 响应式适配 ========== */
+@media (min-width: 768rpx) {
+  .task-type-grid,
+  .action-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .options-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

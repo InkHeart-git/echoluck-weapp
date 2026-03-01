@@ -1,0 +1,535 @@
+/* pages/calendar/calendar.wxss - iOS深色星空风格 */
+
+.container {
+  padding: 20rpx 30rpx 40rpx;
+  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
+  min-height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* ========== 概览区域 ========== */
+.overview-section {
+  background: rgba(30, 35, 60, 0.6);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 32rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.4);
+}
+
+.overview-header {
+  margin-bottom: 24rpx;
+}
+
+.overview-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #ffffff;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.overview-subtitle {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.overview-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.overview-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20rpx;
+  padding: 20rpx 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+}
+
+.overview-icon {
+  font-size: 36rpx;
+}
+
+.overview-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #007AFF;
+}
+
+.overview-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* 趋势图 */
+.trend-section {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.trend-title {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 16rpx;
+}
+
+.trend-chart {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 140rpx;
+  padding: 0 10rpx;
+}
+
+.trend-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  flex: 1;
+}
+
+.trend-bar-wrapper {
+  width: 24rpx;
+  height: 100rpx;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.trend-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #007AFF, #5856D6);
+  border-radius: 12rpx;
+  min-height: 4rpx;
+  transition: height 0.5s ease;
+}
+
+.trend-label {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.trend-value {
+  font-size: 18rpx;
+  color: #007AFF;
+  font-weight: 600;
+}
+
+/* ========== 月份选择器 ========== */
+.month-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0 30rpx;
+  gap: 40rpx;
+}
+
+.arrow {
+  width: 56rpx;
+  height: 56rpx;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10rpx);
+  -webkit-backdrop-filter: blur(10rpx);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #007AFF;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.3);
+}
+
+.arrow:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.current-month {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #ffffff;
+  min-width: 200rpx;
+  text-align: center;
+}
+
+/* ========== 星期标题 ========== */
+.week-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 10rpx;
+}
+
+.week-day {
+  text-align: center;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+.week-day:first-child {
+  color: #FF3B30;
+}
+
+/* ========== 日历格子 ========== */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10rpx;
+  padding: 10rpx 0;
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16rpx;
+  position: relative;
+  transition: all 0.3s;
+  border: 1rpx solid transparent;
+}
+
+.calendar-cell:active {
+  transform: scale(0.95);
+}
+
+/* 当月日期 - 正常显示 */
+.calendar-cell.current-month {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+}
+
+/* 过去的日期 - 淡灰色 */
+.calendar-cell.is-past {
+  background: rgba(255, 255, 255, 0.04);
+  opacity: 0.7;
+}
+
+.calendar-cell.is-past .day-number {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* 未来的日期 - 更淡的灰色 */
+.calendar-cell.is-future {
+  background: rgba(255, 255, 255, 0.03);
+  opacity: 0.5;
+}
+
+.calendar-cell.is-future .day-number {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* 上月和下月的日期 - 最淡 */
+.calendar-cell.prev-month,
+.calendar-cell.next-month {
+  background: rgba(255, 255, 255, 0.02);
+  opacity: 0.3;
+}
+
+.calendar-cell.prev-month .day-number,
+.calendar-cell.next-month .day-number {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* 今天 - 高亮 */
+.calendar-cell.is-today {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.4);
+}
+
+.calendar-cell.is-today .day-number {
+  color: white;
+  font-weight: 700;
+}
+
+/* 有打卡记录的 */
+.calendar-cell.has-checkin {
+  border-color: #34C759;
+}
+
+.calendar-cell.has-checkin::after {
+  content: '';
+  position: absolute;
+  top: 4rpx;
+  right: 4rpx;
+  width: 12rpx;
+  height: 12rpx;
+  background: #34C759;
+  border-radius: 50%;
+  box-shadow: 0 0 8rpx rgba(52, 199, 89, 0.6);
+}
+
+/* 选中的日期 */
+.calendar-cell.selected {
+  border-color: #007AFF;
+  border-width: 3rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.day-number {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.checkin-dot {
+  position: absolute;
+  bottom: 8rpx;
+  width: 24rpx;
+  height: 24rpx;
+  background: #34C759;
+  border-radius: 50%;
+  color: white;
+  font-size: 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-cell.is-today .checkin-dot {
+  background: white;
+  color: #007AFF;
+}
+
+.streak-badge {
+  position: absolute;
+  top: 4rpx;
+  right: 4rpx;
+  background: #FF9500;
+  color: white;
+  font-size: 18rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 10rpx;
+  font-weight: 600;
+}
+
+/* ========== 本月统计 ========== */
+.month-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 30rpx 0;
+  margin-top: 20rpx;
+  background: rgba(30, 35, 60, 0.6);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.stat-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #007AFF;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ========== 选中日期的详情 ========== */
+.day-detail-panel {
+  margin-top: 30rpx;
+  background: rgba(30, 35, 60, 0.6);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 28rpx;
+  padding: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-date {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.detail-count {
+  font-size: 24rpx;
+  color: #007AFF;
+  background: rgba(0, 122, 255, 0.15);
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+/* ========== 记录列表 ========== */
+.records-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.record-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+}
+
+.record-main {
+  display: flex;
+  gap: 20rpx;
+  flex: 1;
+}
+
+.record-icon {
+  width: 72rpx;
+  height: 72rpx;
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+.record-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.record-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 8rpx;
+}
+
+.record-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1;
+}
+
+.record-subtitle {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.record-description {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+}
+
+.record-points-badge {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 24rpx;
+  padding: 16rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+.points-value {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: white;
+}
+
+.points-unit {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.day-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 2rpx dashed rgba(255, 255, 255, 0.1);
+}
+
+.total-label {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.total-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #007AFF;
+}
+
+/* ========== 无记录 ========== */
+.no-records {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0;
+}
+
+.no-records-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.5;
+}
+
+.no-records-text {
+  font-size: 30rpx;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12rpx;
+}
+
+.no-records-hint {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* 动画 */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}

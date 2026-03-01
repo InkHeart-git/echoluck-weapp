@@ -1,0 +1,33 @@
+<!-- 估值页面 -->
+<view class="container">
+  <view class="header">
+    <view class="title">正在评估难度...</view>
+    <view class="subtitle">评估此目标的实现所需积分</view>
+  </view>
+
+  <!-- 目标信息 -->
+  <view class="wish-info" wx:if="{{wish}}">
+    <view class="wish-text">{{wish}}</view>
+  </view>
+
+  <!-- 雷达动画 -->
+  <view class="radar-container">
+    <view class="radar-circle" style="animation-delay: 0s"></view>
+    <view class="radar-circle" style="animation-delay: 1s"></view>
+    <view class="price-display {{locked ? 'locked' : ''}}">{{displayPrice}}</view>
+  </view>
+
+  <!-- 投票日志 -->
+  <view class="vote-log">
+    <view wx:for="{{voteBubbles}}" wx:key="id" class="vote-bubble" style="left: {{item.left}}%; top: {{item.top}}%">
+      {{item.text}}
+    </view>
+  </view>
+
+  <view class="footer">
+    <view class="status">{{statusText}}</view>
+    <button class="btn {{locked ? 'btn-primary' : 'btn-disabled'}}" bindtap="acceptChallenge" disabled="{{!locked}}">
+      {{locked ? '确认创建 (' + targetPoints + ' pts)' : '等待评估...'}}
+    </button>
+  </view>
+</view>

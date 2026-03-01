@@ -1,0 +1,171 @@
+/* 全局深色星空主题变量 - iOS风格 */
+page {
+  /* 深色背景渐变 - 深蓝星空 */
+  --bg-primary: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
+  --bg-card: rgba(30, 35, 60, 0.6);
+  --bg-card-hover: rgba(40, 45, 75, 0.8);
+  --bg-glass: rgba(255, 255, 255, 0.08);
+  
+  /* iOS风格强调色 - 蓝紫色系 */
+  --accent-primary: #007AFF;
+  --accent-secondary: #5856D6;
+  --accent-purple: #AF52DE;
+  --accent-pink: #FF2D55;
+  --accent-success: #34C759;
+  --accent-warning: #FF9500;
+  --accent-error: #FF3B30;
+  
+  /* 文字颜色 */
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: rgba(255, 255, 255, 0.5);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  
+  /* 边框和阴影 */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(0, 122, 255, 0.3);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 30rpx rgba(0, 122, 255, 0.2);
+  
+  /* 渐变 */
+  --gradient-primary: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+  --gradient-secondary: linear-gradient(135deg, #5856D6 0%, #AF52DE 100%);
+  --gradient-success: linear-gradient(135deg, #34C759 0%, #30D158 100%);
+  --gradient-warning: linear-gradient(135deg, #FF9500 0%, #FFCC00 100%);
+  
+  /* 星空装饰 */
+  --star-glow: 0 0 20rpx rgba(255, 255, 255, 0.5);
+}
+
+/* 全局背景 */
+page {
+  background: var(--bg-primary);
+  min-height: 100vh;
+}
+
+/* 星空背景动画 */
+@keyframes twinkle {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10rpx); }
+}
+
+/* 玻璃拟态效果 */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid var(--border-color);
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid var(--border-color);
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 32rpx var(--shadow-color);
+}
+
+/* iOS风格按钮 */
+.ios-btn {
+  border-radius: 16rpx;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ios-btn:active {
+  transform: scale(0.96);
+  opacity: 0.8;
+}
+
+/* 卡片样式 */
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid var(--border-color);
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 32rpx var(--shadow-color);
+}
+
+.card-hover {
+  background: var(--bg-card-hover);
+}
+
+/* 文字样式 */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+/* 输入框样式 */
+.input-dark {
+  background: var(--bg-glass);
+  border: 1rpx solid var(--border-color);
+  border-radius: 16rpx;
+  color: var(--text-primary);
+  padding: 24rpx;
+}
+
+.input-dark:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4rpx rgba(0, 122, 255, 0.15);
+}
+
+/* 按钮样式 */
+.btn-dark-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 8rpx 28rpx rgba(0, 122, 255, 0.4);
+}
+
+.btn-dark-secondary {
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  border: 1rpx solid var(--border-color);
+}
+
+/* 进度条 */
+.progress-dark {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.progress-fill-dark {
+  background: var(--gradient-primary);
+  border-radius: 8rpx;
+}
+
+/* 标签样式 */
+.tag-dark {
+  background: var(--bg-glass);
+  border: 1rpx solid var(--border-color);
+  border-radius: 30rpx;
+  padding: 12rpx 24rpx;
+  color: var(--text-secondary);
+}
+
+.tag-dark.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}

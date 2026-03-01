@@ -1,0 +1,328 @@
+/** 
+ * 全局深色星空主题变量 - iOS风格
+ * 路径: utils/dark-theme.wxss
+ * 使用方法: 在 app.wxss 顶部添加 @import './utils/dark-theme.wxss';
+ */
+
+/* ==================== CSS 变量定义 ==================== */
+page {
+  /* 深蓝星空背景 */
+  --bg-primary: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 50%, #0f1429 100%);
+  --bg-secondary: #0a0e27;
+  --bg-tertiary: #1a1f3a;
+  
+  /* 玻璃拟态卡片背景 - rgba(255,255,255,0.05) + backdrop-filter */
+  --bg-card: rgba(30, 35, 60, 0.6);
+  --bg-card-hover: rgba(40, 45, 75, 0.8);
+  --bg-glass: rgba(255, 255, 255, 0.08);
+  --bg-glass-hover: rgba(255, 255, 255, 0.12);
+  
+  /* iOS蓝紫主色 #6366f1 */
+  --accent-primary: #6366f1;
+  --accent-secondary: #5856D6;
+  --accent-purple: #AF52DE;
+  --accent-pink: #FF2D55;
+  --accent-success: #34C759;
+  --accent-warning: #FF9500;
+  --accent-error: #FF3B30;
+  --accent-info: #007AFF;
+  
+  /* 文字颜色 */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: rgba(255, 255, 255, 0.5);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  
+  /* 边框和阴影 */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(99, 102, 241, 0.3);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 30rpx rgba(99, 102, 241, 0.2);
+  
+  /* 渐变 */
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #5856D6 100%);
+  --gradient-secondary: linear-gradient(135deg, #5856D6 0%, #AF52DE 100%);
+  --gradient-success: linear-gradient(135deg, #34C759 0%, #30D158 100%);
+  --gradient-warning: linear-gradient(135deg, #FF9500 0%, #FFCC00 100%);
+  --gradient-error: linear-gradient(135deg, #FF3B30 0%, #FF6B6B 100%);
+  
+  /* 星空装饰 */
+  --star-glow: 0 0 20rpx rgba(255, 255, 255, 0.5);
+  --star-color: #ffffff;
+  
+  /* 字体 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ==================== 全局背景 ==================== */
+page {
+  background: var(--bg-primary);
+  min-height: 100vh;
+  color: var(--text-primary);
+}
+
+/* ==================== 星空背景动画 ==================== */
+@keyframes twinkle {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16rpx); }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20rpx rgba(99, 102, 241, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 40rpx rgba(99, 102, 241, 0.6);
+  }
+}
+
+@keyframes shooting-star {
+  0% {
+    transform: translateX(-100rpx) translateY(0) rotate(-45deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300rpx) translateY(300rpx) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+/* ==================== 玻璃拟态效果 ==================== */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid var(--border-color);
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid var(--border-color);
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 32rpx var(--shadow-color);
+}
+
+.glass-card-hover {
+  background: var(--bg-card-hover);
+}
+
+/* ==================== iOS风格按钮 ==================== */
+.ios-btn {
+  border-radius: 16rpx;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ios-btn:active {
+  transform: scale(0.96);
+  opacity: 0.8;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 8rpx 28rpx rgba(99, 102, 241, 0.4);
+}
+
+.btn-primary:active {
+  box-shadow: 0 4rpx 16rpx rgba(99, 102, 241, 0.3);
+}
+
+.btn-secondary {
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  border: 1rpx solid var(--border-color);
+}
+
+.btn-success {
+  background: var(--gradient-success);
+  color: white;
+  box-shadow: 0 8rpx 28rpx rgba(52, 199, 89, 0.4);
+}
+
+/* ==================== 容器 ==================== */
+.container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ==================== 星空背景层 ==================== */
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* 星星 */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle var(--twinkle-duration, 3s) infinite ease-in-out;
+  opacity: var(--star-opacity, 0.5);
+}
+
+/* 小星星 */
+.star-small {
+  width: 2rpx;
+  height: 2rpx;
+  box-shadow: 0 0 4rpx rgba(255, 255, 255, 0.8);
+}
+
+/* 中等星星 */
+.star-medium {
+  width: 4rpx;
+  height: 4rpx;
+  box-shadow: 0 0 8rpx rgba(255, 255, 255, 0.8);
+}
+
+/* 大星星 */
+.star-large {
+  width: 6rpx;
+  height: 6rpx;
+  box-shadow: 0 0 12rpx rgba(255, 255, 255, 0.9), 0 0 20rpx rgba(99, 102, 241, 0.3);
+}
+
+/* 流星 */
+.shooting-star {
+  position: absolute;
+  width: 100rpx;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: shooting-star var(--shoot-duration, 4s) linear infinite;
+  opacity: 0;
+}
+
+/* 内容层（在星空之上） */
+.content-layer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==================== 通用卡片样式 ==================== */
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid var(--border-color);
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 32rpx var(--shadow-color);
+}
+
+.card-hover {
+  background: var(--bg-card-hover);
+}
+
+/* ==================== 文字样式 ==================== */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+/* ==================== 输入框样式 ==================== */
+.input-dark {
+  background: var(--bg-glass);
+  border: 1rpx solid var(--border-color);
+  border-radius: 16rpx;
+  color: var(--text-primary);
+  padding: 24rpx;
+}
+
+.input-dark:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4rpx rgba(99, 102, 241, 0.15);
+}
+
+.input-dark::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* ==================== 选中态 ==================== */
+.selected-glow {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3rpx rgba(99, 102, 241, 0.2), var(--shadow-glow);
+}
+
+/* ==================== 进度条 ==================== */
+.progress-dark {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.progress-fill-dark {
+  background: var(--gradient-primary);
+  border-radius: 8rpx;
+}
+
+/* ==================== 标签样式 ==================== */
+.tag-dark {
+  background: var(--bg-glass);
+  border: 1rpx solid var(--border-color);
+  border-radius: 30rpx;
+  padding: 12rpx 24rpx;
+  color: var(--text-secondary);
+}
+
+.tag-dark.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
+/* ==================== 禁用态 ==================== */
+.disabled-dark {
+  opacity: 0.4;
+  filter: grayscale(0.5);
+}
+
+/* ==================== 霓虹发光效果 ==================== */
+.neon-glow {
+  box-shadow: 0 0 20rpx rgba(99, 102, 241, 0.5), 0 0 40rpx rgba(88, 86, 214, 0.3);
+}
+
+.breathing {
+  animation: breathe 3s infinite ease-in-out;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite ease-in-out;
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "打卡日历",
+  "navigationBarBackgroundColor": "#FFF5F8",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#FFF5F8"
+}

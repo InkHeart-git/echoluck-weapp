@@ -1,0 +1,134 @@
+<!--pages/calendar/calendar.wxml-->
+<view class="container">
+  <!-- 概览区域 -->
+  <view class="overview-section">
+    <view class="overview-header">
+      <text class="overview-title">📊 数据概览</text>
+      <text class="overview-subtitle">坚持打卡，见证成长</text>
+    </view>
+    
+    <view class="overview-stats">
+      <view class="overview-item">
+        <view class="overview-icon">🎯</view>
+        <view class="overview-value">{{overview.totalWishes}}</view>
+        <view class="overview-label">总愿望</view>
+      </view>
+      <view class="overview-item">
+        <view class="overview-icon">✨</view>
+        <view class="overview-value">{{overview.completedWishes}}</view>
+        <view class="overview-label">已完成</view>
+      </view>
+      <view class="overview-item">
+        <view class="overview-icon">📅</view>
+        <view class="overview-value">{{overview.totalLogs}}</view>
+        <view class="overview-label">打卡次数</view>
+      </view>
+      <view class="overview-item">
+        <view class="overview-icon">🔥</view>
+        <view class="overview-value">{{overview.currentStreak}}</view>
+        <view class="overview-label">连续天数</view>
+      </view>
+    </view>
+    
+    <!-- 月度趋势图 -->
+    <view class="trend-section" wx:if="{{overview.monthlyStats.length > 0}}">
+      <view class="trend-title">近6个月打卡趋势</view>
+      <view class="trend-chart">
+        <view class="trend-bar-item" wx:for="{{overview.monthlyStats}}" wx:key="month">
+          <view class="trend-bar-wrapper">
+            <view class="trend-bar" style="height: {{item.logs > 0 ? Math.min(100, item.logs * 10) : 5}}%"></view>
+          </view>
+          <view class="trend-label">{{item.label}}</view>
+          <view class="trend-value" wx:if="{{item.logs > 0}}">{{item.logs}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 月份选择器 -->
+  <view class="month-selector">
+    <view class="arrow" bindtap="changeMonth" data-delta="-1">◀</view>
+    <view class="current-month">{{currentYear}}年{{currentMonth}}月</view>
+    <view class="arrow" bindtap="changeMonth" data-delta="1">▶</view>
+  </view>
+
+  <!-- 星期标题 -->
+  <view class="week-header">
+    <view wx:for="{{weekdays}}" wx:key="*this" class="week-day">{{item}}</view>
+  </view>
+
+  <!-- 日历格子 -->
+  <view class="calendar-grid">
+    <view
+      wx:for="{{days}}"
+      wx:key="date"
+      class="calendar-cell {{item.type}} {{item.hasLog ? 'has-checkin' : ''}} {{item.isToday ? 'is-today' : ''}} {{item.isPast ? 'is-past' : ''}} {{item.isFuture ? 'is-future' : ''}} {{selectedDate === item.date ? 'selected' : ''}}"
+      bindtap="selectDate"
+      data-date="{{item.date}}"
+    >
+      <view class="day-number">{{item.day}}</view>
+      <view wx:if="{{item.hasLog}}" class="checkin-dot">✓</view>
+      <view wx:if="{{item.streak > 1}}" class="streak-badge">{{item.streak}}</view>
+    </view>
+  </view>
+
+  <!-- 本月统计 -->
+  <view class="month-stats">
+    <view class="stat-item">
+      <view class="stat-value">{{stats.totalLogs}}</view>
+      <view class="stat-label">本月打卡</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-value">{{stats.currentStreak}}</view>
+      <view class="stat-label">连续天数</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-value">{{stats.totalScore}}</view>
+      <view class="stat-label">获得积分</view>
+    </view>
+  </view>
+
+  <!-- 选中日期的详情 -->
+  <view wx:if="{{selectedDate}}" class="day-detail-panel">
+    <view class="detail-header">
+      <view class="detail-date">{{selectedDateStr}}</view>
+      <view class="detail-count" wx:if="{{dayLogs.length > 0}}">{{dayLogs.length}} 条记录</view>
+    </view>
+
+    <view wx:if="{{dayLogs.length > 0}}" class="records-list">
+      <view
+        wx:for="{{dayLogs}}"
+        wx:key="id"
+        class="record-card"
+      >
+        <view class="record-main">
+          <view class="record-icon">{{item.taskTypeIcon || '📋'}}</view>
+          <view class="record-content">
+            <view class="record-title-row">
+              <text class="record-title">{{item.capsuleWish || '打卡记录'}}</text>
+            </view>
+            <view class="record-subtitle" wx:if="{{item.actionName || item.taskTypeName}}">{{item.taskTypeIcon || ''}} {{item.actionName || item.taskTypeName}}</view>
+            <view class="record-description" wx:if="{{item.description}}">{{item.description}}</view>
+          </view>
+        </view>
+
+        <view class="record-points-badge">
+          <text class="points-value">+{{item.score || 0}}</text>
+          <text class="points-unit">pt</text>
+        </view>
+      </view>
+
+      <!-- 当日总积分 -->
+      <view class="day-total">
+        <text class="total-label">当日总计</text>
+        <text class="total-value">+{{dayTotalScore}} pt</text>
+      </view>
+    </view>
+
+    <view wx:else class="no-records">
+      <view class="no-records-icon">📅</view>
+      <view class="no-records-text">该日暂无打卡记录</view>
+      <view class="no-records-hint">点击「记录」标签开始打卡吧~</view>
+    </view>
+  </view>
+</view>

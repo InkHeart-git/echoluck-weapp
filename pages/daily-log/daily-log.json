@@ -1,0 +1,8 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "记录今日",
+  "navigationBarBackgroundColor": "#ff6b9d",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#ffe4ec",
+  "enableShareTimeline": true
+}

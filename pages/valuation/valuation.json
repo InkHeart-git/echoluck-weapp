@@ -1,0 +1,8 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "目标评估",
+  "navigationBarBackgroundColor": "#ff6b9d",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#ffe4ec",
+  "enableShareTimeline": true
+}

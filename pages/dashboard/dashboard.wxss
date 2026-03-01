@@ -1,0 +1,228 @@
+/* pages/dashboard/dashboard.wxss - iOS深色星空风格 */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
+  padding: 20rpx;
+  padding-bottom: 40rpx;
+  position: relative;
+}
+
+/* 统计卡片 */
+.stats-card {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(30, 35, 60, 0.6);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 32rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+}
+
+.stat-item {
+  text-align: center;
+  position: relative;
+}
+
+.stat-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #007AFF;
+  margin-bottom: 10rpx;
+}
+
+.stat-value.checked {
+  color: #34C759;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.streak-flame {
+  position: absolute;
+  top: -10rpx;
+  right: -20rpx;
+  font-size: 32rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(255, 149, 0, 0.5));
+}
+
+/* 连续打卡横幅 */
+.streak-banner {
+  background: linear-gradient(90deg, #007AFF 0%, #5856D6 100%);
+  color: white;
+  padding: 24rpx 30rpx;
+  border-radius: 24rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 32rpx rgba(0, 122, 255, 0.4);
+}
+
+.streak-icon {
+  margin-right: 10rpx;
+}
+
+/* 标题 */
+.section-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.section-title .count {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.4);
+  margin-left: 10rpx;
+  font-weight: normal;
+}
+
+/* 胶囊列表 */
+.capsule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.capsule-item {
+  background: rgba(30, 35, 60, 0.6);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-radius: 28rpx;
+  padding: 30rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+}
+
+.capsule-item.completed {
+  opacity: 0.85;
+  border-color: rgba(52, 199, 89, 0.3);
+  background: rgba(52, 199, 89, 0.1);
+}
+
+.capsule-item.expired {
+  opacity: 0.6;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.capsule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.capsule-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 32rpx;
+  font-weight: 600;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.capsule-status {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.capsule-meta {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.meta-icon {
+  font-size: 24rpx;
+}
+
+/* 进度条 */
+.progress-bar {
+  height: 10rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #007AFF, #5856D6);
+  border-radius: 5rpx;
+  transition: width 0.5s ease;
+}
+
+.capsule-item.completed .progress-fill {
+  background: linear-gradient(90deg, #34C759, #30D158);
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 16rpx;
+}
+
+.btn {
+  flex: 1;
+  padding: 22rpx 30rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.btn-checkin {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  color: white;
+  box-shadow: 0 8rpx 28rpx rgba(0, 122, 255, 0.35);
+}
+
+.btn-checkin:active {
+  transform: scale(0.96);
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.25);
+}
+
+.btn-detail {
+  background: rgba(255, 255, 255, 0.08);
+  color: #007AFF;
+  border: 1rpx solid rgba(0, 122, 255, 0.3);
+}
+
+.btn-detail:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 40rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.4;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.4);
+}

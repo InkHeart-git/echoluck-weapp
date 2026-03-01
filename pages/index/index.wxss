@@ -1,0 +1,363 @@
+/* 许愿首页样式 - iOS深色星空风格 */
+.container {
+  padding: 40rpx 30rpx;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  margin: 0 auto 20rpx;
+  filter: drop-shadow(0 4rpx 20rpx rgba(0, 122, 255, 0.5));
+  animation: float 3s infinite ease-in-out;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 10rpx;
+  text-shadow: 0 2rpx 20rpx rgba(0, 122, 255, 0.5);
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+/* 快捷许愿区 */
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  margin-bottom: 40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.preset-chip {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  border-radius: 32rpx;
+  padding: 30rpx 20rpx;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.3);
+}
+
+.preset-chip:active {
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.preset-chip.active {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-color: rgba(0, 122, 255, 0.5);
+  box-shadow: 0 8rpx 32rpx rgba(0, 122, 255, 0.4);
+}
+
+.preset-chip.active .preset-text {
+  color: #ffffff;
+}
+
+.preset-icon {
+  font-size: 56rpx;
+  display: block;
+  margin-bottom: 12rpx;
+  filter: drop-shadow(0 2rpx 8rpx rgba(0, 0, 0, 0.3));
+}
+
+.preset-text {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+/* 难度选择 */
+.section-label {
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.difficulty-tabs {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.difficulty-tab {
+  flex: 1;
+  padding: 24rpx 16rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+}
+
+.difficulty-tab:active {
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.difficulty-tab.active {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-color: rgba(0, 122, 255, 0.5);
+  box-shadow: 0 8rpx 28rpx rgba(0, 122, 255, 0.35);
+}
+
+.difficulty-tab.easy.active {
+  background: linear-gradient(135deg, #34C759, #30D158);
+  border-color: rgba(52, 199, 89, 0.5);
+  box-shadow: 0 8rpx 28rpx rgba(52, 199, 89, 0.35);
+}
+
+.difficulty-tab.medium.active {
+  background: linear-gradient(135deg, #FF9500, #FFCC00);
+  border-color: rgba(255, 149, 0, 0.5);
+  box-shadow: 0 8rpx 28rpx rgba(255, 149, 0, 0.35);
+}
+
+.difficulty-tab.hard.active {
+  background: linear-gradient(135deg, #FF3B30, #FF6B6B);
+  border-color: rgba(255, 59, 48, 0.5);
+  box-shadow: 0 8rpx 28rpx rgba(255, 59, 48, 0.35);
+}
+
+.difficulty-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 6rpx;
+}
+
+.difficulty-tab.active .difficulty-label {
+  color: #ffffff;
+}
+
+.difficulty-range {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.difficulty-tab.active .difficulty-range {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 任务类型选择 - 首页不需要，但保留样式 */
+.task-type-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  margin-bottom: 30rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.task-type-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx 10rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  border-radius: 24rpx;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+}
+
+.task-type-item:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.task-type-item.active {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-color: rgba(0, 122, 255, 0.5);
+  box-shadow: 0 8rpx 28rpx rgba(0, 122, 255, 0.35);
+}
+
+.task-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+  filter: drop-shadow(0 2rpx 8rpx rgba(0, 0, 0, 0.3));
+}
+
+.task-name {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.task-type-item.active .task-name {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* 任务示例盒子 */
+.task-example-box {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  border-radius: 28rpx;
+  padding: 28rpx;
+  margin-bottom: 40rpx;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.task-example-box:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.task-example-label {
+  display: block;
+  font-size: 24rpx;
+  color: #007AFF;
+  margin-bottom: 10rpx;
+  font-weight: 600;
+}
+
+.task-example-text {
+  display: block;
+  font-size: 30rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+/* 输入框 */
+.wish-input {
+  width: 100%;
+  min-height: 140rpx;
+  padding: 28rpx;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  border-radius: 28rpx;
+  color: #ffffff;
+  font-size: 30rpx;
+  margin-bottom: 30rpx;
+  box-sizing: border-box;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.wish-input:focus {
+  border-color: rgba(0, 122, 255, 0.5);
+  box-shadow: 0 0 0 6rpx rgba(0, 122, 255, 0.15);
+}
+
+.wish-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* 选择器 */
+.picker {
+  width: 100%;
+  padding: 32rpx 28rpx;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  border-radius: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 30rpx;
+  margin-bottom: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.picker-arrow {
+  color: #007AFF;
+  font-size: 28rpx;
+}
+
+/* 按钮 */
+.btn {
+  width: 100%;
+  padding: 32rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  color: white;
+  box-shadow: 0 8rpx 32rpx rgba(0, 122, 255, 0.4);
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+/* 动画 */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16rpx); }
+}
+
+/* 星空背景容器 */
+.starfield-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* 星星元素 - 由JS动态生成 */
+.star-bg {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 6rpx rgba(255, 255, 255, 0.8);
+}
