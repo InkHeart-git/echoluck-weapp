@@ -226,6 +226,41 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* 分享区域 */
+.share-section {
+  margin-top: 40rpx;
+  padding: 0 20rpx 40rpx;
+}
+
+.btn-share-poster {
+  width: 100%;
+  padding: 30rpx 0;
+  background: linear-gradient(135deg, #007AFF, #5856D6);
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 122, 255, 0.4);
+  border: none;
+  transition: all 0.3s;
+}
+
+.btn-share-poster:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+.share-icon {
+  font-size: 36rpx;
+}
+
+.share-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: white;
+}
+
 /* 空状态 */
 .empty-state {
   text-align: center;

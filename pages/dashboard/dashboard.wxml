@@ -79,6 +79,14 @@
     </view>
   </view>
 
+  <!-- 分享海报按钮 -->
+  <view class="share-section">
+    <button class="btn-share-poster" bindtap="onGeneratePoster">
+      <text class="share-icon">📸</text>
+      <text class="share-text">生成分享海报</text>
+    </button>
+  </view>
+
   <!-- 空状态 -->
   <view class="empty-state" wx:if="{{capsules.length === 0 && !loading}}">
     <view class="empty-icon">💊</view>

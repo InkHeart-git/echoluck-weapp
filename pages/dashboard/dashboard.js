@@ -1,5 +1,6 @@
 // pages/dashboard/dashboard.js
 const app = getApp();
+const PosterGenerator = require('../../utils/posterGenerator.js');
 
 Page({
   data: {
@@ -225,5 +226,104 @@ Page({
       title: `我在我的愿望打卡本积累了 ${totalPoints} 积分`,
       path: '/pages/index/index'
     };
+  },
+
+  // 生成分享海报
+  async onGeneratePoster() {
+    const posterGen = new PosterGenerator();
+    
+    wx.showLoading({ 
+      title: '生成海报中...',
+      mask: true 
+    });
+
+    try {
+      // 获取随机激励语
+      const quotes = [
+        '坚持就是胜利',
+        '每一天都是新的开始',
+        '积少成多，聚沙成塔',
+        '越努力，越幸运',
+        '星光不问赶路人',
+        '时光不负有心人'
+      ];
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+
+      // 准备海报数据
+      const posterData = {
+        userName: app.globalData.userInfo?.nickName || '我',
+        streakDays: this.data.streak.current,
+        checkInDays: app.globalData.completedTasks || 0,
+        completedGoals: this.data.completedWishes,
+        totalPoints: this.data.totalPoints,
+        quote: quote,
+        // 如果有配置二维码URL，传入
+        qrCodeUrl: app.globalData.posterConfig?.qrCodeUrl || null
+      };
+
+      posterGen.generateCheckInPoster(posterData, (err, tempFilePath) => {
+        wx.hideLoading();
+        
+        if (err) {
+          console.error('海报生成失败:', err);
+          wx.showToast({ 
+            title: '生成失败，请重试', 
+            icon: 'none' 
+          });
+          return;
+        }
+
+        // 显示预览和操作选项
+        wx.showActionSheet({
+          itemList: ['保存到相册', '预览图片'],
+          success: (res) => {
+            if (res.tapIndex === 0) {
+              // 保存到相册
+              wx.saveImageToPhotosAlbum({
+                filePath: tempFilePath,
+                success: () => {
+                  wx.showToast({ 
+                    title: '已保存到相册',
+                    icon: 'success' 
+                  });
+                },
+                fail: (saveErr) => {
+                  if (saveErr.errMsg.includes('auth')) {
+                    // 需要授权
+                    wx.showModal({
+                      title: '需要授权',
+                      content: '保存图片需要访问相册权限',
+                      success: (modalRes) => {
+                        if (modalRes.confirm) {
+                          wx.openSetting();
+                        }
+                      }
+                    });
+                  } else {
+                    wx.showToast({ 
+                      title: '保存失败', 
+                      icon: 'none' 
+                    });
+                  }
+                }
+              });
+            } else if (res.tapIndex === 1) {
+              // 预览图片
+              wx.previewImage({
+                urls: [tempFilePath],
+                current: tempFilePath
+              });
+            }
+          }
+        });
+      });
+    } catch (error) {
+      wx.hideLoading();
+      console.error('生成海报出错:', error);
+      wx.showToast({ 
+        title: '生成失败', 
+        icon: 'none' 
+      });
+    }
   }
 });
