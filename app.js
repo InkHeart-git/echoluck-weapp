@@ -11,9 +11,8 @@ App({
     },
     // 海报分享配置
     posterConfig: {
-      // 二维码图片URL（需要上传到云存储）
-      // 示例：'https://your-bucket.cos.ap-guangzhou.myqcloud.com/qrcode-light.png'
-      qrCodeUrl: null
+      // 二维码图片URL
+      qrCodeUrl: 'https://raw.githubusercontent.com/InkHeart-git/echoluck-weapp/main/images/promo/qrcode-light.png'
     }
   },
 
