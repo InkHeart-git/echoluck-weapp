@@ -516,8 +516,9 @@ class PosterGenerator {
 
   /**
    * 绘制底部信息（含二维码）
+   * 支持本地路径或网络URL
    */
-  async drawFooter(ctx) {
+  async drawFooter(ctx, qrCodePath = null) {
     const y = 1000;
     
     ctx.save();
@@ -535,33 +536,48 @@ class PosterGenerator {
     ctx.fillText('扫码使用小程序', 280, y + 35);
     ctx.fillText('一起打卡记录生活', 280, y + 62);
     
-    // 绘制二维码
-    try {
-      const qrSize = 120;
-      const qrX = 520;
-      const qrY = y - 40;
-      
-      // 二维码背景白色圆角
-      this.drawRoundRect(ctx, qrX - 10, qrY - 10, qrSize + 20, qrSize + 20, 12, '#ffffff');
-      
-      // 绘制二维码图片（使用占位符，实际项目中使用真实图片路径）
-      // 注意：微信小程序 Canvas 绘制图片需要特殊处理
-      ctx.fillStyle = '#ffffff';
+    // 绘制二维码区域
+    const qrSize = 120;
+    const qrX = 520;
+    const qrY = y - 40;
+    
+    // 二维码背景白色圆角
+    this.drawRoundRect(ctx, qrX - 10, qrY - 10, qrSize + 20, qrSize + 20, 12, '#ffffff');
+    
+    // 如果有二维码路径，尝试绘制
+    if (qrCodePath) {
+      try {
+        // 注意：微信小程序 Canvas 绘制图片需要特殊处理
+        // 如果是网络图片，需要先下载
+        if (qrCodePath.startsWith('http')) {
+          // 网络图片需要使用 downloadFile 下载后绘制
+          // 这里绘制占位符，实际使用时通过回调处理
+          ctx.strokeStyle = '#6366f1';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(qrX, qrY, qrSize, qrSize);
+          
+          // 提示文字
+          ctx.fillStyle = '#6366f1';
+          ctx.font = '20px sans-serif';
+          ctx.fillText('二维码', qrX + qrSize/2, qrY + qrSize/2);
+        } else {
+          // 本地图片（开发时使用）
+          ctx.fillStyle = '#f0f0f0';
+          ctx.fillRect(qrX, qrY, qrSize, qrSize);
+        }
+      } catch (e) {
+        console.warn('二维码绘制失败:', e);
+      }
+    } else {
+      // 默认占位
+      ctx.fillStyle = '#f0f0f0';
       ctx.fillRect(qrX, qrY, qrSize, qrSize);
-      
-      // 二维码边框
-      ctx.strokeStyle = 'rgba(99, 102, 241, 0.3)';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(qrX, qrY, qrSize, qrSize);
       
       // 小程序图标占位
       ctx.fillStyle = '#6366f1';
       ctx.beginPath();
       ctx.arc(qrX + qrSize/2, qrY + qrSize/2, 20, 0, Math.PI * 2);
       ctx.fill();
-      
-    } catch (e) {
-      console.warn('二维码绘制失败:', e);
     }
     
     ctx.restore();

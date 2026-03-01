@@ -9,6 +9,10 @@
       {
         "value": "node_modules",
         "type": "folder"
+      },
+      {
+        "value": "images/promo",
+        "type": "folder"
       }
     ],
     "include": []

@@ -1,55 +1,76 @@
 # 宣传物料说明
 
-## 文件清单
+## ⚠️ 重要提示
 
-### 二维码（太阳码）
-- `qrcode-dark.png` - 深色版小程序码（适合浅色背景）
-- `qrcode-light.png` - 浅色版小程序码（适合深色背景）
+由于小程序包体积限制（2MB），宣传物料大文件已移至项目外：
 
-### 海报模板
-- `poster-dark.png` - 深色版朋友圈海报
-- `poster-light.png` - 浅色版朋友圈海报
+**原文件位置**: `assets/promo-large/`
+- 包含：高清海报、高清二维码、设计源文件
 
-### 设计源文件
-- `source.ai` - Adobe Illustrator 源文件
-- `source-sketch.sketch` - Sketch 源文件
-- `design-guide.pdf` - 设计规范文档
+**小程序内仅保留**: `images/promo/README.md`
 
-## 使用场景
+## 使用方案
 
-### 1. 海报分享功能
-在 `utils/posterGenerator.js` 中生成分享海报时，可添加小程序二维码：
+### 方案1：云存储（推荐）
+将大文件上传到腾讯云 COS/阿里云 OSS，使用网络图片链接：
 
 ```javascript
-// 绘制二维码到海报
-const qrCodePath = '/images/promo/qrcode-light.png';
-ctx.drawImage(qrCodePath, x, y, width, height);
+// 海报分享时加载网络图片
+wx.getImageInfo({
+  src: 'https://your-cdn.com/promo/qrcode-light.png',
+  success: (res) => {
+    // 使用 res.path 绘制到 canvas
+  }
+});
 ```
 
-### 2. 关于页面
-可在小程序"关于"页面展示小程序码，方便用户分享。
-
-### 3. 线下推广
-打印二维码用于线下推广物料。
-
-## 注意事项
-
-1. **二维码有效期**：小程序码永久有效
-2. **尺寸建议**：显示尺寸不小于 100x100px
-3. **安全区域**：二维码周围保留 10% 的空白区域
-4. **颜色对比**：确保二维码与背景有足够的对比度
-
-## 文件位置
-
+### 方案2：本地真机调试（开发测试）
+在电脑上进行真机调试时，可通过微信开发者工具预览：
 ```
-echoluck-weapp/
-└── images/
-    └── promo/
-        ├── qrcode-dark.png
-        ├── qrcode-light.png
-        ├── poster-dark.png
-        ├── poster-light.png
-        ├── source.ai
-        ├── source-sketch.sketch
-        └── design-guide.pdf
+项目设置 → 本地设置 → 不校验合法域名
 ```
+
+### 方案3：上传时排除（当前配置）
+`project.config.json` 已配置排除 `images/promo` 目录：
+```json
+{
+  "packOptions": {
+    "ignore": [{"value": "images/promo", "type": "folder"}]
+  }
+}
+```
+
+## 文件清单（在项目根目录 assets/promo-large/）
+
+| 文件 | 说明 | 大小 |
+|------|------|------|
+| `qrcode-dark.png` | 深色版小程序码 | 6.8MB |
+| `qrcode-light.png` | 浅色版小程序码 | 6.8MB |
+| `poster-dark.png` | 深色版朋友圈海报 | 4.1MB |
+| `poster-light.png` | 浅色版朋友圈海报 | 4.1MB |
+| `source.ai` | Adobe Illustrator 源文件 | 862KB |
+| `source-sketch.sketch` | Sketch 源文件 | 428KB |
+| `design-guide.pdf` | 设计规范文档 | 1.3MB |
+
+## 上传到云存储
+
+### 腾讯云 COS
+1. 登录 https://console.cloud.tencent.com/cos
+2. 创建存储桶（选择公有读私有写）
+3. 上传文件
+4. 获取 URL：`https://your-bucket.cos.your-region.myqcloud.com/promo/qrcode-light.png`
+
+### 代码中使用
+
+在 `utils/posterGenerator.js` 中：
+```javascript
+// 绘制二维码
+const qrCodeUrl = 'https://your-cdn.com/promo/qrcode-light.png';
+wx.downloadFile({
+  url: qrCodeUrl,
+  success: (res) => {
+    ctx.drawImage(res.tempFilePath, qrX, qrY, qrSize, qrSize);
+  }
+});
+```
+
