@@ -8,6 +8,12 @@ App({
       current: 0,
       lastCheckIn: null,
       bufferUsed: false
+    },
+    // 海报分享配置
+    posterConfig: {
+      // 二维码图片URL（需要上传到云存储）
+      // 示例：'https://your-bucket.cos.ap-guangzhou.myqcloud.com/qrcode-light.png'
+      qrCodeUrl: null
     }
   },
 
