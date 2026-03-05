@@ -1,8 +1,12 @@
 /* pages/calendar/calendar.wxss - iOS深色星空风格 */
 
+page {
+  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
+  min-height: 100vh;
+}
+
 .container {
   padding: 20rpx 30rpx 40rpx;
-  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
   min-height: 100vh;
   box-sizing: border-box;
   position: relative;

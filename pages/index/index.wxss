@@ -1,8 +1,12 @@
 /* 许愿首页样式 - iOS深色星空风格 */
+page {
+  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
+  min-height: 100vh;
+}
+
 .container {
   padding: 40rpx 30rpx;
   min-height: 100vh;
-  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3d 50%, #0f1429 100%);
   box-sizing: border-box;
   position: relative;
 }

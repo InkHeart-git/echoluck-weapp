@@ -9,17 +9,17 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#ff6b9d",
+    "navigationBarBackgroundColor": "#0a0e27",
     "navigationBarTitleText": "我的愿望打卡本",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#ffeef5",
+    "backgroundColor": "#0a0e27",
     "enablePullDownRefresh": true
   },
   "tabBar": {
     "color": "#999999",
-    "selectedColor": "#ff6b9d",
-    "backgroundColor": "#ffffff",
-    "borderStyle": "white",
+    "selectedColor": "#007AFF",
+    "backgroundColor": "#1a1f3d",
+    "borderStyle": "black",
     "list": [
       {
         "pagePath": "pages/index/index",
