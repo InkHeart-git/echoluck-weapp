@@ -465,9 +465,9 @@ class PosterGenerator {
     ctx.fillText('一起打卡记录生活', 60, y + 65);
     
     // 右侧二维码区域
-    const qrSize = 110;
-    const qrX = 580;
-    const qrY = y - 35;
+    const qrSize = 200;
+    const qrX = 520;
+    const qrY = y - 70;
     
     // 二维码白色背景
     this.drawRoundRect(ctx, qrX - 8, qrY - 8, qrSize + 16, qrSize + 16, 12, '#ffffff');
