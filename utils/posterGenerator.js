@@ -464,16 +464,21 @@ class PosterGenerator {
     ctx.fillText('扫码使用小程序', 60, y + 50);
     ctx.fillText('记录生活小确幸', 60, y + 90);
 
-    // 右侧二维码（放在宣传语旁边）
+    // 右侧二维码（圆形）
     const qrSize = 200;
-    const qrX = 480;
-    const qrY = y - 50;
-
-    // 二维码白色背景
-    this.drawRoundRect(ctx, qrX - 16, qrY - 16, qrSize + 32, qrSize + 32, 20, '#ffffff');
+    const qrX = 480 + qrSize / 2;
+    const qrY = y - 50 + qrSize / 2;
+    const radius = qrSize / 2;
 
     if (qrCodePath) {
       try {
+        // 创建圆形裁剪区域
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(qrX, qrY, radius, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+
         // Canvas 2D 需要先加载图片
         if (canvas && canvas.createImage) {
           const img = canvas.createImage();
@@ -482,20 +487,30 @@ class PosterGenerator {
             img.onerror = (e) => reject(new Error('图片加载失败: ' + qrCodePath));
             img.src = qrCodePath;
           });
-          ctx.drawImage(img, qrX, qrY, qrSize, qrSize);
+          ctx.drawImage(img, qrX - radius, qrY - radius, qrSize, qrSize);
           console.log('[PosterGenerator] Canvas 2D 二维码绘制成功');
         } else {
-          // 旧版 Canvas 直接用路径（支持本地图片路径如 /images/xxx.jpg）
-          ctx.drawImage(qrCodePath, qrX, qrY, qrSize, qrSize);
+          // 旧版 Canvas 直接用路径
+          ctx.drawImage(qrCodePath, qrX - radius, qrY - radius, qrSize, qrSize);
           console.log('[PosterGenerator] 旧版 Canvas 二维码绘制成功, 路径:', qrCodePath);
         }
+
+        ctx.restore();
+
+        // 绘制白色细边框（可选装饰）
+        ctx.beginPath();
+        ctx.arc(qrX, qrY, radius + 4, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
       } catch (e) {
         console.error('[PosterGenerator] 绘制二维码图片失败:', e);
-        this.drawQRFallback(ctx, qrX, qrY, qrSize);
+        this.drawQRFallback(ctx, qrX - radius, qrY - radius, qrSize);
       }
     } else {
       // 绘制占位符
-      this.drawQRFallback(ctx, qrX, qrY, qrSize);
+      this.drawQRFallback(ctx, qrX - radius, qrY - radius, qrSize);
     }
 
     ctx.restore();
@@ -505,21 +520,27 @@ class PosterGenerator {
    * 绘制二维码占位符（无二维码时）
    */
   drawQRFallback(ctx, x, y, size) {
-    // 浅灰背景
-    ctx.fillStyle = '#f5f5f5';
-    ctx.fillRect(x, y, size, size);
+    const centerX = x + size / 2;
+    const centerY = y + size / 2;
+    const radius = size / 2;
+
+    // 灰色圆形背景
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.fill();
 
     // 中间蓝色圆点
     ctx.fillStyle = '#007AFF';
     ctx.beginPath();
-    ctx.arc(x + size/2, y + size/2, size/6, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, size / 6, 0, Math.PI * 2);
     ctx.fill();
 
     // 提示文字
-    ctx.fillStyle = '#999';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
     ctx.font = '24px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('小程序码', x + size/2, y + size + 30);
+    ctx.fillText('小程序码', centerX, centerY + size / 2 + 30);
   }
 
   /**
