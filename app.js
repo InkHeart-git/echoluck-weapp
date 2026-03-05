@@ -12,7 +12,7 @@ App({
     // 海报分享配置
     posterConfig: {
       // 二维码图片路径（本地图片，打包在小程序内）
-      qrCodeUrl: '/images/promo/qrcode-light.jpg'
+      qrCodeUrl: '/images/qr/qrcode.jpg'
     }
   },
 
