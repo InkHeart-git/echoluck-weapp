@@ -157,8 +157,8 @@ class PosterGenerator {
       // 7. 绘制激励语
       this.drawQuote(ctx, quote);
       
-      // 8. 绘制底部信息和二维码（使用await等待图片加载）
-      await this.drawFooter(ctx, qrCodePath);
+      // 8. 绘制底部信息和二维码（传递 canvas 用于 Canvas 2D 图片加载）
+      await this.drawFooter(ctx, qrCodePath, canvas);
 
       // 9. 生成图片
       if (isOffscreen) {
@@ -436,9 +436,10 @@ class PosterGenerator {
    * 绘制底部信息和二维码
    * @param {Object} ctx - Canvas 上下文
    * @param {string} qrCodePath - 二维码本地路径（可选）
+   * @param {Object} canvas - Canvas 对象（Canvas 2D 需要）
    * @returns {Promise} 绘制完成的Promise
    */
-  async drawFooter(ctx, qrCodePath = null) {
+  async drawFooter(ctx, qrCodePath = null, canvas = null) {
     const y = 1050;
     
     ctx.save();
@@ -465,15 +466,23 @@ class PosterGenerator {
     
     if (qrCodePath) {
       try {
-        // 使用 getImageInfo 获取图片信息并绘制
-        const imgInfo = await this.getImageInfo(qrCodePath);
-        if (imgInfo && imgInfo.path) {
-          ctx.drawImage(imgInfo.path, qrX, qrY, qrSize, qrSize);
+        // Canvas 2D 需要先加载图片
+        if (canvas && canvas.createImage) {
+          const img = canvas.createImage();
+          await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            img.src = qrCodePath;
+          });
+          ctx.drawImage(img, qrX, qrY, qrSize, qrSize);
+          console.log('[PosterGenerator] Canvas 2D 二维码绘制成功');
         } else {
-          this.drawQRFallback(ctx, qrX, qrY, qrSize);
+          // 旧版 Canvas 直接用路径
+          ctx.drawImage(qrCodePath, qrX, qrY, qrSize, qrSize);
+          console.log('[PosterGenerator] 旧版 Canvas 二维码绘制成功');
         }
       } catch (e) {
-        console.warn('绘制二维码图片失败:', e);
+        console.error('[PosterGenerator] 绘制二维码图片失败:', e);
         this.drawQRFallback(ctx, qrX, qrY, qrSize);
       }
     } else {
@@ -482,21 +491,6 @@ class PosterGenerator {
     }
     
     ctx.restore();
-  }
-
-  /**
-   * 获取图片信息（Promise封装）
-   * @param {string} src - 图片路径
-   * @returns {Promise} 图片信息
-   */
-  getImageInfo(src) {
-    return new Promise((resolve, reject) => {
-      wx.getImageInfo({
-        src: src,
-        success: (res) => resolve(res),
-        fail: (err) => reject(err)
-      });
-    });
   }
 
   /**
