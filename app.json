@@ -39,6 +39,9 @@
       }
     ]
   },
+  "networkTimeout": {
+    "downloadFile": 10000
+  },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"

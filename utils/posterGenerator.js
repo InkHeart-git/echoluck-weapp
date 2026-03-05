@@ -41,7 +41,11 @@ class PosterGenerator {
           }
         },
         fail: (err) => {
-          console.warn(`下载图片失败: ${url}`, err);
+          console.error(`[PosterGenerator] 下载图片失败: ${url}`, err);
+          // 提示域名配置问题
+          if (err.errMsg && err.errMsg.includes('domain')) {
+            console.error('[PosterGenerator] 提示: 请在微信公众平台配置 downloadFile 合法域名，或在开发者工具中开启「不校验合法域名」');
+          }
           reject(err);
         }
       });
@@ -118,11 +122,15 @@ class PosterGenerator {
     try {
       // 1. 下载二维码图片（如果有）
       let qrCodePath = null;
+      let qrCodeError = null;
       if (qrCodeUrl) {
         try {
           qrCodePath = await this.downloadImage(qrCodeUrl);
+          console.log('[PosterGenerator] 二维码下载成功:', qrCodePath);
         } catch (e) {
-          console.warn('二维码下载失败，使用占位符:', e);
+          qrCodeError = e;
+          console.error('[PosterGenerator] 二维码下载失败:', e);
+          console.error('[PosterGenerator] 提示: 请检查服务器域名是否在小程序 downloadFile 白名单中');
         }
       }
 
