@@ -271,6 +271,8 @@
   opacity: 0;
   pointer-events: none;
 }
+
+.empty-state {
   text-align: center;
   padding: 100rpx 40rpx;
   color: rgba(255, 255, 255, 0.5);
