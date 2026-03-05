@@ -125,10 +125,12 @@ class PosterGenerator {
       let qrCodeError = null;
       if (qrCodeUrl) {
         try {
-          // 本地图片路径直接使用，网络图片需要下载
+          // 本地图片路径需要获取信息，网络图片需要下载
           if (qrCodeUrl.startsWith('/')) {
-            qrCodePath = qrCodeUrl;
-            console.log('[PosterGenerator] 使用本地二维码:', qrCodePath);
+            // 本地图片：使用 getImageInfo 获取可绘制的路径
+            const imgInfo = await this.getImageInfo(qrCodeUrl);
+            qrCodePath = imgInfo.path;
+            console.log('[PosterGenerator] 本地二维码加载成功:', qrCodePath);
           } else {
             qrCodePath = await this.downloadImage(qrCodeUrl);
             console.log('[PosterGenerator] 二维码下载成功:', qrCodePath);
@@ -517,6 +519,21 @@ class PosterGenerator {
     ctx.font = '16px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('小程序码', x + size/2, y + size + 20);
+  }
+
+  /**
+   * 获取图片信息（Promise封装）- 用于加载本地图片
+   * @param {string} src - 图片路径
+   * @returns {Promise} 图片信息
+   */
+  getImageInfo(src) {
+    return new Promise((resolve, reject) => {
+      wx.getImageInfo({
+        src: src,
+        success: (res) => resolve(res),
+        fail: (err) => reject(err)
+      });
+    });
   }
 
   /**
