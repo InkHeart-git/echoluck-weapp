@@ -448,17 +448,29 @@ class PosterGenerator {
    * @returns {Promise} 绘制完成的Promise
    */
   async drawFooter(ctx, qrCodePath = null, canvas = null) {
-    const y = 950;
+    const y = 1000;
 
     ctx.save();
 
-    // 居中显示大二维码
-    const qrSize = 320;
-    const qrX = (this.canvasWidth - qrSize) / 2;
-    const qrY = y;
+    // 左侧宣传语
+    ctx.font = 'bold 36px sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('我的愿望打卡本', 60, y);
+
+    ctx.font = '28px sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fillText('扫码使用小程序', 60, y + 50);
+    ctx.fillText('记录生活小确幸', 60, y + 90);
+
+    // 右侧二维码（放在宣传语旁边）
+    const qrSize = 200;
+    const qrX = 480;
+    const qrY = y - 50;
 
     // 二维码白色背景
-    this.drawRoundRect(ctx, qrX - 24, qrY - 24, qrSize + 48, qrSize + 48, 28, '#ffffff');
+    this.drawRoundRect(ctx, qrX - 16, qrY - 16, qrSize + 32, qrSize + 32, 20, '#ffffff');
 
     if (qrCodePath) {
       try {
