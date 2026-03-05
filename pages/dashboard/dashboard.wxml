@@ -97,4 +97,11 @@
 
   <!-- 加载中 -->
   <view class="loading" wx:if="{{loading}}">加载中...</view>
+
+  <!-- 海报 Canvas（隐藏） -->
+  <canvas 
+    canvas-id="posterCanvas" 
+    class="poster-canvas"
+    style="width: 750px; height: 1200px;"
+  ></canvas>
 </view>

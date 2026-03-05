@@ -261,8 +261,16 @@
   color: white;
 }
 
-/* 空状态 */
-.empty-state {
+/* 海报 Canvas（隐藏但可绘制） */
+.poster-canvas {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 750px;
+  height: 1200px;
+  opacity: 0;
+  pointer-events: none;
+}
   text-align: center;
   padding: 100rpx 40rpx;
   color: rgba(255, 255, 255, 0.5);
