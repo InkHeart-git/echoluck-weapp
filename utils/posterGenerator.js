@@ -148,22 +148,22 @@ class PosterGenerator {
       // 3. 绘制背景
       this.drawBackground(ctx);
 
-      // 4. 绘制标题
-      this.drawTitle(ctx, '我的打卡成就');
+      // 4. 绘制主标题
+      this.drawMainTitle(ctx, '每一小步，都是向更好的自己迈进');
 
-      // 5. 绘制用户信息
-      await this.drawUserInfo(ctx, userName, userAvatar);
+      // 5. 绘制副标题/能量标语
+      this.drawEnergyTag(ctx, streakDays);
 
-      // 6. 绘制统计数据
-      this.drawStats(ctx, {
+      // 6. 绘制能量统计卡片
+      this.drawEnergyStats(ctx, {
         checkInDays,
         totalPoints,
         completedGoals,
         streakDays
       });
 
-      // 7. 绘制激励语
-      this.drawQuote(ctx, quote);
+      // 7. 绘制激励语录
+      this.drawInspiringQuote(ctx, quote, streakDays);
 
       // 8. 绘制底部信息和二维码（传递 canvas 用于 Canvas 2D 图片加载）
       await this.drawFooter(ctx, qrCodeSrc, canvas);
@@ -299,60 +299,107 @@ class PosterGenerator {
   }
 
   /**
-   * 绘制标题
+   * 绘制主标题 - 更有吸引力的文案
    */
-  drawTitle(ctx, title) {
+  drawMainTitle(ctx, title) {
     ctx.save();
-    ctx.font = 'bold 48px sans-serif';
+
+    // 大标题
+    ctx.font = 'bold 44px sans-serif';
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(title, this.canvasWidth / 2, 100);
 
-    // 下划线
+    // 装饰光点
+    ctx.fillStyle = '#FFD700';
     ctx.beginPath();
-    ctx.moveTo(280, 125);
-    ctx.lineTo(470, 125);
-    ctx.strokeStyle = '#007AFF';
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    ctx.arc(180, 100, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(570, 100, 6, 0, Math.PI * 2);
+    ctx.fill();
+
     ctx.restore();
   }
 
   /**
-   * 绘制用户信息
+   * 绘制能量标签 - 根据连续打卡天数显示不同标语
    */
-  async drawUserInfo(ctx, userName, avatarUrl) {
-    const centerX = this.canvasWidth / 2;
-    const y = 180;
-
+  drawEnergyTag(ctx, streakDays) {
     ctx.save();
-    ctx.font = '32px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+
+    const centerX = this.canvasWidth / 2;
+    const y = 160;
+
+    // 根据连续天数选择标语
+    let tagText = '🔥 自律给我自由';
+    let tagColor = '#FF9500';
+
+    if (streakDays >= 30) {
+      tagText = '👑 自律王者，能量满满';
+      tagColor = '#FFD700';
+    } else if (streakDays >= 14) {
+      tagText = '💪 习惯已成，势不可挡';
+      tagColor = '#FF6B9D';
+    } else if (streakDays >= 7) {
+      tagText = '⭐ 坚持一周，蜕变开始';
+      tagColor = '#5856D6';
+    } else if (streakDays >= 3) {
+      tagText = '🚀 连续打卡，动力十足';
+      tagColor = '#34C759';
+    }
+
+    // 标签背景
+    ctx.font = 'bold 28px sans-serif';
+    const textWidth = ctx.measureText(tagText).width;
+    const padding = 24;
+    const tagWidth = textWidth + padding * 2;
+    const tagHeight = 48;
+
+    this.drawRoundRect(
+      ctx,
+      centerX - tagWidth / 2,
+      y - tagHeight / 2,
+      tagWidth,
+      tagHeight,
+      24,
+      tagColor + '30' // 20% 透明度背景
+    );
+
+    // 标签边框
+    ctx.strokeStyle = tagColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // 标签文字
+    ctx.fillStyle = tagColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(`${userName}的打卡记录`, centerX, y);
+    ctx.fillText(tagText, centerX, y);
+
     ctx.restore();
   }
 
   /**
-   * 绘制统计数据
+   * 绘制能量统计卡片 - 突出正能量积累
    */
-  drawStats(ctx, stats) {
+  drawEnergyStats(ctx, stats) {
     const { checkInDays, totalPoints, completedGoals, streakDays } = stats;
 
+    // 使用更有意义的标签
     const statsData = [
-      { label: '连续打卡', value: streakDays, unit: '天', color: '#FF9500' },
-      { label: '累计打卡', value: checkInDays, unit: '天', color: '#007AFF' },
-      { label: '完成目标', value: completedGoals, unit: '个', color: '#34C759' },
-      { label: '获得积分', value: totalPoints, unit: '分', color: '#AF52DE' }
+      { label: '✨ 正能量值', value: totalPoints, unit: '分', color: '#FFD700', icon: '⚡' },
+      { label: '🔥 连续打卡', value: streakDays, unit: '天', color: '#FF6B9D', icon: '🔥' },
+      { label: '✅ 已完成目标', value: completedGoals, unit: '个', color: '#34C759', icon: '✅' },
+      { label: '📅 累计打卡', value: checkInDays, unit: '天', color: '#5856D6', icon: '📅' }
     ];
 
-    const startY = 280;
+    const startY = 240;
     const cardWidth = 300;
-    const cardHeight = 180;
+    const cardHeight = 160;
     const gapX = 70;
-    const gapY = 40;
+    const gapY = 30;
 
     statsData.forEach((item, index) => {
       const col = index % 2;
@@ -360,82 +407,117 @@ class PosterGenerator {
       const x = 75 + col * (cardWidth + gapX);
       const y = startY + row * (cardHeight + gapY);
 
-      this.drawStatCard(ctx, x, y, cardWidth, cardHeight, item);
+      this.drawEnergyCard(ctx, x, y, cardWidth, cardHeight, item);
     });
   }
 
   /**
-   * 绘制单个统计卡片
+   * 绘制单个能量卡片
    */
-  drawStatCard(ctx, x, y, width, height, item) {
+  drawEnergyCard(ctx, x, y, width, height, item) {
     ctx.save();
 
-    // 卡片背景 - 玻璃拟态
-    this.drawRoundRect(ctx, x, y, width, height, 20, 'rgba(30, 35, 60, 0.6)');
+    // 卡片背景 - 渐变效果
+    const gradient = ctx.createLinearGradient(x, y, x + width, y + height);
+    gradient.addColorStop(0, item.color + '20'); // 10% 透明度
+    gradient.addColorStop(1, item.color + '08');
 
-    // 卡片边框
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-    ctx.lineWidth = 1;
+    this.drawRoundRect(ctx, x, y, width, height, 20, gradient);
+
+    // 卡片边框 - 发光效果
+    ctx.strokeStyle = item.color + '40';
+    ctx.lineWidth = 2;
     ctx.stroke();
+
+    // 图标
+    ctx.font = '40px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(item.icon, x + 20, y + 20);
 
     // 数值
     ctx.font = 'bold 56px sans-serif';
     ctx.fillStyle = item.color;
-    ctx.textAlign = 'center';
+    ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
-    ctx.fillText(String(item.value), x + width / 2, y + 70);
+    ctx.fillText(String(item.value), x + width - 20, y + 60);
 
     // 单位
     ctx.font = '24px sans-serif';
-    ctx.fillText(item.unit, x + width / 2 + 50, y + 70);
+    ctx.fillText(item.unit, x + width - 20, y + 95);
 
     // 标签
-    ctx.font = '28px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.fillText(item.label, x + width / 2, y + 125);
+    ctx.font = '24px sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.textAlign = 'left';
+    ctx.fillText(item.label, x + 20, y + height - 35);
 
     ctx.restore();
   }
 
   /**
-   * 绘制激励语
+   * 绘制激励语录 - 更有感染力的文案
    */
-  drawQuote(ctx, quote) {
-    const y = 780;
-    const maxWidth = 560;
-    const lineHeight = 50;
-    const maxLines = 3;
+  drawInspiringQuote(ctx, quote, streakDays) {
+    const y = 680;
 
     ctx.save();
 
-    // 自动换行处理
-    const lines = this.wrapText(ctx, quote, maxWidth, 36, maxLines);
+    // 默认励志语录
+    let inspiringText = quote;
+    if (!inspiringText || inspiringText === '坚持就是胜利') {
+      const quotes = [
+        '自律不是束缚，而是通往自由的钥匙',
+        '每一滴汗水，都是未来的光芒',
+        '你今天流的汗，是明天绽放的花',
+        '坚持是最酷的自律，打卡是最美的仪式',
+        '积跬步以至千里，积小流以成江海',
+        '今天的你，比昨天更强大'
+      ];
+      inspiringText = quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    // 引用框背景
+    const boxPadding = 30;
+    const maxWidth = 600;
+    ctx.font = 'italic 32px sans-serif';
+    const lines = this.wrapText(ctx, inspiringText, maxWidth - boxPadding * 2, 32, 2);
+    const lineHeight = 44;
+    const boxHeight = lines.length * lineHeight + boxPadding * 2;
+
+    // 渐变背景框
+    const gradient = ctx.createLinearGradient(75, y - boxHeight / 2, 675, y + boxHeight / 2);
+    gradient.addColorStop(0, 'rgba(88, 86, 214, 0.15)');
+    gradient.addColorStop(0.5, 'rgba(0, 122, 255, 0.1)');
+    gradient.addColorStop(1, 'rgba(52, 199, 89, 0.15)');
+
+    this.drawRoundRect(ctx, 75, y - boxHeight / 2, 600, boxHeight, 16, gradient);
+
+    // 左边装饰条
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(75, y - boxHeight / 2, 4, boxHeight);
 
     // 引号
-    ctx.font = 'bold 60px serif';
-    ctx.fillStyle = '#007AFF';
+    ctx.font = 'bold 48px serif';
+    ctx.fillStyle = '#FFD700';
     ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText('"', 60, y - 10);
+    ctx.fillText('"', 95, y - boxHeight / 2 + 35);
 
     // 文字
-    ctx.font = 'italic 36px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.font = 'italic 30px sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
 
-    const totalHeight = lines.length * lineHeight;
-    const startY = y - totalHeight / 2 + lineHeight / 2;
-
+    const startY = y - (lines.length - 1) * lineHeight / 2;
     lines.forEach((line, index) => {
       ctx.fillText(line, this.canvasWidth / 2, startY + index * lineHeight);
     });
 
     // 结束引号
-    ctx.font = 'bold 60px serif';
-    ctx.fillStyle = '#007AFF';
+    ctx.font = 'bold 48px serif';
+    ctx.fillStyle = '#FFD700';
     ctx.textAlign = 'right';
-    ctx.fillText('"', 690, startY + (lines.length - 1) * lineHeight - 10);
+    ctx.fillText('"', 655, startY + (lines.length - 1) * lineHeight - 10);
 
     ctx.restore();
   }
