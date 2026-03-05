@@ -1,7 +1,7 @@
 /**
  * 海报生成工具类
  * 使用微信小程序 Canvas API 生成分享海报
- * 
+ *
  * 支持：
  * 1. 离线 Canvas 提升性能
  * 2. 网络图片下载并绘制（如二维码）
@@ -59,7 +59,7 @@ class PosterGenerator {
    */
   async downloadImages(urls) {
     const results = { success: [], failed: [] };
-    
+
     for (const url of urls) {
       try {
         const path = await this.downloadImage(url);
@@ -68,7 +68,7 @@ class PosterGenerator {
         results.failed.push({ url, error: err });
       }
     }
-    
+
     return results;
   }
 
@@ -85,7 +85,7 @@ class PosterGenerator {
           width: this.canvasWidth,
           height: this.canvasHeight
         });
-        
+
         if (offscreenCanvas && offscreenCanvas.getContext) {
           const ctx = offscreenCanvas.getContext('2d');
           if (ctx) {
@@ -110,10 +110,10 @@ class PosterGenerator {
    * @param {Function} callback - 生成完成回调
    */
   async generateCheckInPoster(data, callback) {
-    const { 
-      userName = '我', 
-      checkInDays = 0, 
-      totalPoints = 0, 
+    const {
+      userName = '我',
+      checkInDays = 0,
+      totalPoints = 0,
       completedGoals = 0,
       streakDays = 0,
       quote = '坚持就是胜利',
@@ -147,13 +147,13 @@ class PosterGenerator {
 
       // 3. 绘制背景
       this.drawBackground(ctx);
-      
+
       // 4. 绘制标题
       this.drawTitle(ctx, '我的打卡成就');
-      
+
       // 5. 绘制用户信息
       await this.drawUserInfo(ctx, userName, userAvatar);
-      
+
       // 6. 绘制统计数据
       this.drawStats(ctx, {
         checkInDays,
@@ -161,10 +161,10 @@ class PosterGenerator {
         completedGoals,
         streakDays
       });
-      
+
       // 7. 绘制激励语
       this.drawQuote(ctx, quote);
-      
+
       // 8. 绘制底部信息和二维码（传递 canvas 用于 Canvas 2D 图片加载）
       await this.drawFooter(ctx, qrCodeSrc, canvas);
 
@@ -246,15 +246,15 @@ class PosterGenerator {
     gradient.addColorStop(0, '#0a0e27');
     gradient.addColorStop(0.5, '#1a1f3d');
     gradient.addColorStop(1, '#0f1429');
-    
+
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-    
+
     // 装饰圆形
     this.drawCircle(ctx, 600, 200, 150, 'rgba(0, 122, 255, 0.08)');
     this.drawCircle(ctx, 100, 800, 100, 'rgba(88, 86, 214, 0.08)');
     this.drawCircle(ctx, 650, 1000, 80, 'rgba(52, 199, 89, 0.05)');
-    
+
     // 绘制星星
     this.drawStars(ctx);
   }
@@ -275,7 +275,7 @@ class PosterGenerator {
       { x: 80, y: 900, size: 2, opacity: 0.6 },
       { x: 680, y: 950, size: 3, opacity: 0.8 },
     ];
-    
+
     stars.forEach(star => {
       ctx.save();
       ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
@@ -308,7 +308,7 @@ class PosterGenerator {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(title, this.canvasWidth / 2, 100);
-    
+
     // 下划线
     ctx.beginPath();
     ctx.moveTo(280, 125);
@@ -340,26 +340,26 @@ class PosterGenerator {
    */
   drawStats(ctx, stats) {
     const { checkInDays, totalPoints, completedGoals, streakDays } = stats;
-    
+
     const statsData = [
       { label: '连续打卡', value: streakDays, unit: '天', color: '#FF9500' },
       { label: '累计打卡', value: checkInDays, unit: '天', color: '#007AFF' },
       { label: '完成目标', value: completedGoals, unit: '个', color: '#34C759' },
       { label: '获得积分', value: totalPoints, unit: '分', color: '#AF52DE' }
     ];
-    
+
     const startY = 280;
     const cardWidth = 300;
     const cardHeight = 180;
     const gapX = 70;
     const gapY = 40;
-    
+
     statsData.forEach((item, index) => {
       const col = index % 2;
       const row = Math.floor(index / 2);
       const x = 75 + col * (cardWidth + gapX);
       const y = startY + row * (cardHeight + gapY);
-      
+
       this.drawStatCard(ctx, x, y, cardWidth, cardHeight, item);
     });
   }
@@ -369,31 +369,31 @@ class PosterGenerator {
    */
   drawStatCard(ctx, x, y, width, height, item) {
     ctx.save();
-    
+
     // 卡片背景 - 玻璃拟态
     this.drawRoundRect(ctx, x, y, width, height, 20, 'rgba(30, 35, 60, 0.6)');
-    
+
     // 卡片边框
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.lineWidth = 1;
     ctx.stroke();
-    
+
     // 数值
     ctx.font = 'bold 56px sans-serif';
     ctx.fillStyle = item.color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(String(item.value), x + width / 2, y + 70);
-    
+
     // 单位
     ctx.font = '24px sans-serif';
     ctx.fillText(item.unit, x + width / 2 + 50, y + 70);
-    
+
     // 标签
     ctx.font = '28px sans-serif';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
     ctx.fillText(item.label, x + width / 2, y + 125);
-    
+
     ctx.restore();
   }
 
@@ -405,38 +405,38 @@ class PosterGenerator {
     const maxWidth = 560;
     const lineHeight = 50;
     const maxLines = 3;
-    
+
     ctx.save();
-    
+
     // 自动换行处理
     const lines = this.wrapText(ctx, quote, maxWidth, 36, maxLines);
-    
+
     // 引号
     ctx.font = 'bold 60px serif';
     ctx.fillStyle = '#007AFF';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillText('"', 60, y - 10);
-    
+
     // 文字
     ctx.font = 'italic 36px sans-serif';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    
+
     const totalHeight = lines.length * lineHeight;
     const startY = y - totalHeight / 2 + lineHeight / 2;
-    
+
     lines.forEach((line, index) => {
       ctx.fillText(line, this.canvasWidth / 2, startY + index * lineHeight);
     });
-    
+
     // 结束引号
     ctx.font = 'bold 60px serif';
     ctx.fillStyle = '#007AFF';
     ctx.textAlign = 'right';
     ctx.fillText('"', 690, startY + (lines.length - 1) * lineHeight - 10);
-    
+
     ctx.restore();
   }
 
@@ -448,30 +448,18 @@ class PosterGenerator {
    * @returns {Promise} 绘制完成的Promise
    */
   async drawFooter(ctx, qrCodePath = null, canvas = null) {
-    const y = 1020;
-    
+    const y = 950;
+
     ctx.save();
-    
-    // 左侧文字信息
-    ctx.font = '32px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('我的愿望打卡本', 60, y);
-    
-    ctx.font = '26px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.fillText('扫码使用小程序', 60, y + 45);
-    ctx.fillText('一起打卡记录生活', 60, y + 80);
-    
-    // 右侧大二维码区域
-    const qrSize = 280;
-    const qrX = 420;
-    const qrY = y - 100;
-    
-    // 二维码白色背景（更大的圆角矩形）
-    this.drawRoundRect(ctx, qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 24, '#ffffff');
-    
+
+    // 居中显示大二维码
+    const qrSize = 320;
+    const qrX = (this.canvasWidth - qrSize) / 2;
+    const qrY = y;
+
+    // 二维码白色背景
+    this.drawRoundRect(ctx, qrX - 24, qrY - 24, qrSize + 48, qrSize + 48, 28, '#ffffff');
+
     if (qrCodePath) {
       try {
         // Canvas 2D 需要先加载图片
@@ -497,7 +485,7 @@ class PosterGenerator {
       // 绘制占位符
       this.drawQRFallback(ctx, qrX, qrY, qrSize);
     }
-    
+
     ctx.restore();
   }
 
@@ -508,13 +496,13 @@ class PosterGenerator {
     // 浅灰背景
     ctx.fillStyle = '#f5f5f5';
     ctx.fillRect(x, y, size, size);
-    
+
     // 中间蓝色圆点
     ctx.fillStyle = '#007AFF';
     ctx.beginPath();
     ctx.arc(x + size/2, y + size/2, size/6, 0, Math.PI * 2);
     ctx.fill();
-    
+
     // 提示文字
     ctx.fillStyle = '#999';
     ctx.font = '24px sans-serif';
@@ -542,10 +530,10 @@ class PosterGenerator {
    */
   drawRoundRect(ctx, x, y, width, height, radius, fillStyle) {
     ctx.save();
-    
+
     // 微信小程序 Canvas 不支持 roundRect，强制使用兼容方案
     const r = Math.min(radius, width / 2, height / 2);
-    
+
     ctx.beginPath();
     ctx.moveTo(x + r, y);
     ctx.lineTo(x + width - r, y);
@@ -557,10 +545,10 @@ class PosterGenerator {
     ctx.lineTo(x, y + r);
     ctx.quadraticCurveTo(x, y, x + r, y);
     ctx.closePath();
-    
+
     ctx.fillStyle = fillStyle;
     ctx.fill();
-    
+
     ctx.restore();
   }
 
@@ -600,7 +588,7 @@ class PosterGenerator {
       if (testWidth > maxWidth && currentLine.length > 0) {
         lines.push(currentLine);
         currentLine = char;
-        
+
         if (maxLines && lines.length >= maxLines) {
           if (i < chars.length - 1) {
             lines[lines.length - 1] = lines[lines.length - 1].slice(0, -1) + '...';
