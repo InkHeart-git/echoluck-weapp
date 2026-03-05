@@ -11,8 +11,8 @@ App({
     },
     // 海报分享配置
     posterConfig: {
-      // 二维码图片URL
-      qrCodeUrl: 'https://raw.githubusercontent.com/InkHeart-git/echoluck-weapp/main/images/promo/qrcode-light.png'
+      // 二维码图片URL（新加坡服务器）
+      qrCodeUrl: 'http://43.160.193.165/qrcode-light.png'
     }
   },
 
