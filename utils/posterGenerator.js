@@ -125,12 +125,17 @@ class PosterGenerator {
       let qrCodeError = null;
       if (qrCodeUrl) {
         try {
-          qrCodePath = await this.downloadImage(qrCodeUrl);
-          console.log('[PosterGenerator] 二维码下载成功:', qrCodePath);
+          // 本地图片路径直接使用，网络图片需要下载
+          if (qrCodeUrl.startsWith('/')) {
+            qrCodePath = qrCodeUrl;
+            console.log('[PosterGenerator] 使用本地二维码:', qrCodePath);
+          } else {
+            qrCodePath = await this.downloadImage(qrCodeUrl);
+            console.log('[PosterGenerator] 二维码下载成功:', qrCodePath);
+          }
         } catch (e) {
           qrCodeError = e;
-          console.error('[PosterGenerator] 二维码下载失败:', e);
-          console.error('[PosterGenerator] 提示: 请检查服务器域名是否在小程序 downloadFile 白名单中');
+          console.error('[PosterGenerator] 二维码加载失败:', e);
         }
       }
 
@@ -466,12 +471,12 @@ class PosterGenerator {
     
     if (qrCodePath) {
       try {
-        // Canvas 2D 需要先加载图片
+        // 本地图片或下载的图片都需要通过 Image 对象加载
         if (canvas && canvas.createImage) {
           const img = canvas.createImage();
           await new Promise((resolve, reject) => {
             img.onload = resolve;
-            img.onerror = reject;
+            img.onerror = (e) => reject(new Error('图片加载失败: ' + qrCodePath));
             img.src = qrCodePath;
           });
           ctx.drawImage(img, qrX, qrY, qrSize, qrSize);
