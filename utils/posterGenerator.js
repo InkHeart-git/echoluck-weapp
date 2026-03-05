@@ -122,26 +122,23 @@ class PosterGenerator {
     } = data;
 
     try {
-      // 1. 下载二维码图片（如果有）
-      let qrCodePath = null;
-      let qrCodeError = null;
+      // 1. 处理二维码图片（如果有）
+      let qrCodeSrc = null;
       let isLocalImage = false;
       if (qrCodeUrl) {
-        try {
-          // 本地图片路径需要获取信息，网络图片需要下载
-          if (qrCodeUrl.startsWith('/')) {
-            // 本地图片：使用 getImageInfo 获取可绘制的路径
-            const imgInfo = await this.getImageInfo(qrCodeUrl);
-            qrCodePath = imgInfo.path;
-            isLocalImage = true;
-            console.log('[PosterGenerator] 本地二维码加载成功:', qrCodePath);
-          } else {
-            qrCodePath = await this.downloadImage(qrCodeUrl);
-            console.log('[PosterGenerator] 二维码下载成功:', qrCodePath);
+        if (qrCodeUrl.startsWith('/')) {
+          // 本地图片：直接使用路径
+          qrCodeSrc = qrCodeUrl;
+          isLocalImage = true;
+          console.log('[PosterGenerator] 使用本地二维码:', qrCodeSrc);
+        } else {
+          // 网络图片：下载到本地
+          try {
+            qrCodeSrc = await this.downloadImage(qrCodeUrl);
+            console.log('[PosterGenerator] 二维码下载成功:', qrCodeSrc);
+          } catch (e) {
+            console.error('[PosterGenerator] 二维码下载失败:', e);
           }
-        } catch (e) {
-          qrCodeError = e;
-          console.error('[PosterGenerator] 二维码加载失败:', e);
         }
       }
 
@@ -169,7 +166,7 @@ class PosterGenerator {
       this.drawQuote(ctx, quote);
       
       // 8. 绘制底部信息和二维码（传递 canvas 用于 Canvas 2D 图片加载）
-      await this.drawFooter(ctx, qrCodePath, canvas);
+      await this.drawFooter(ctx, qrCodeSrc, canvas);
 
       // 9. 生成图片
       if (isOffscreen) {
@@ -477,7 +474,7 @@ class PosterGenerator {
     
     if (qrCodePath) {
       try {
-        // 本地图片或下载的图片都需要通过 Image 对象加载
+        // Canvas 2D 需要先加载图片
         if (canvas && canvas.createImage) {
           const img = canvas.createImage();
           await new Promise((resolve, reject) => {
@@ -488,9 +485,9 @@ class PosterGenerator {
           ctx.drawImage(img, qrX, qrY, qrSize, qrSize);
           console.log('[PosterGenerator] Canvas 2D 二维码绘制成功');
         } else {
-          // 旧版 Canvas 直接用路径
+          // 旧版 Canvas 直接用路径（支持本地图片路径如 /images/xxx.jpg）
           ctx.drawImage(qrCodePath, qrX, qrY, qrSize, qrSize);
-          console.log('[PosterGenerator] 旧版 Canvas 二维码绘制成功');
+          console.log('[PosterGenerator] 旧版 Canvas 二维码绘制成功, 路径:', qrCodePath);
         }
       } catch (e) {
         console.error('[PosterGenerator] 绘制二维码图片失败:', e);
