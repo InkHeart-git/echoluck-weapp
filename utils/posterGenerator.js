@@ -74,9 +74,11 @@ class PosterGenerator {
 
   /**
    * 创建 Canvas 上下文
+   * @param {boolean} forceLegacy - 是否强制使用旧版 Canvas（本地图片时需要）
    */
-  createCanvasContext() {
-    if (wx.createOffscreenCanvas) {
+  createCanvasContext(forceLegacy = false) {
+    // 本地图片强制使用旧版 Canvas，因为 Canvas 2D 对本地图片支持有问题
+    if (!forceLegacy && wx.createOffscreenCanvas) {
       try {
         const offscreenCanvas = wx.createOffscreenCanvas({
           type: '2d',
@@ -123,6 +125,7 @@ class PosterGenerator {
       // 1. 下载二维码图片（如果有）
       let qrCodePath = null;
       let qrCodeError = null;
+      let isLocalImage = false;
       if (qrCodeUrl) {
         try {
           // 本地图片路径需要获取信息，网络图片需要下载
@@ -130,6 +133,7 @@ class PosterGenerator {
             // 本地图片：使用 getImageInfo 获取可绘制的路径
             const imgInfo = await this.getImageInfo(qrCodeUrl);
             qrCodePath = imgInfo.path;
+            isLocalImage = true;
             console.log('[PosterGenerator] 本地二维码加载成功:', qrCodePath);
           } else {
             qrCodePath = await this.downloadImage(qrCodeUrl);
@@ -141,8 +145,8 @@ class PosterGenerator {
         }
       }
 
-      // 2. 创建 Canvas 上下文
-      const { ctx, canvas, isOffscreen } = this.createCanvasContext();
+      // 2. 创建 Canvas 上下文（本地图片强制使用旧版 Canvas）
+      const { ctx, canvas, isOffscreen } = this.createCanvasContext(isLocalImage);
 
       // 3. 绘制背景
       this.drawBackground(ctx);
