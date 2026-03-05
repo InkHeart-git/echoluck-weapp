@@ -448,29 +448,29 @@ class PosterGenerator {
    * @returns {Promise} 绘制完成的Promise
    */
   async drawFooter(ctx, qrCodePath = null, canvas = null) {
-    const y = 1050;
+    const y = 1020;
     
     ctx.save();
     
     // 左侧文字信息
-    ctx.font = '28px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.font = '32px sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.fillText('我的愿望打卡本', 60, y);
     
-    ctx.font = '24px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.fillText('扫码使用小程序', 60, y + 35);
-    ctx.fillText('一起打卡记录生活', 60, y + 65);
+    ctx.font = '26px sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.fillText('扫码使用小程序', 60, y + 45);
+    ctx.fillText('一起打卡记录生活', 60, y + 80);
     
-    // 右侧二维码区域
-    const qrSize = 200;
-    const qrX = 520;
-    const qrY = y - 70;
+    // 右侧大二维码区域
+    const qrSize = 280;
+    const qrX = 420;
+    const qrY = y - 100;
     
-    // 二维码白色背景
-    this.drawRoundRect(ctx, qrX - 8, qrY - 8, qrSize + 16, qrSize + 16, 12, '#ffffff');
+    // 二维码白色背景（更大的圆角矩形）
+    this.drawRoundRect(ctx, qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 24, '#ffffff');
     
     if (qrCodePath) {
       try {
@@ -512,14 +512,14 @@ class PosterGenerator {
     // 中间蓝色圆点
     ctx.fillStyle = '#007AFF';
     ctx.beginPath();
-    ctx.arc(x + size/2, y + size/2, 20, 0, Math.PI * 2);
+    ctx.arc(x + size/2, y + size/2, size/6, 0, Math.PI * 2);
     ctx.fill();
     
     // 提示文字
     ctx.fillStyle = '#999';
-    ctx.font = '16px sans-serif';
+    ctx.font = '24px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('小程序码', x + size/2, y + size + 20);
+    ctx.fillText('小程序码', x + size/2, y + size + 30);
   }
 
   /**
