@@ -18,6 +18,41 @@ class PosterGenerator {
   }
 
   /**
+   * 将HEX颜色转换为rgba
+   * @param {string} hex - HEX颜色 (#RRGGBB 或 #RRGGBBAA)
+   * @param {number} alpha - 透明度 (0-1)，如果hex已包含透明度则优先使用hex的
+   * @returns {string} rgba颜色字符串
+   */
+  hexToRgba(hex, alpha = 1) {
+    // 移除 # 前缀
+    hex = hex.replace('#', '');
+    
+    let r, g, b, a = alpha;
+    
+    if (hex.length === 8) {
+      // 8位: RRGGBBAA
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+      a = parseInt(hex.substring(6, 8), 16) / 255;
+    } else if (hex.length === 6) {
+      // 6位: RRGGBB
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+    } else if (hex.length === 3) {
+      // 3位: RGB
+      r = parseInt(hex[0] + hex[0], 16);
+      g = parseInt(hex[1] + hex[1], 16);
+      b = parseInt(hex[2] + hex[2], 16);
+    } else {
+      return hex; // 返回原值
+    }
+    
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
+  }
+
+  /**
    * 下载网络图片到本地
    * @param {string} url - 图片URL
    * @returns {Promise<string>} 本地临时文件路径
@@ -419,13 +454,13 @@ class PosterGenerator {
 
     // 卡片背景 - 渐变效果
     const gradient = ctx.createLinearGradient(x, y, x + width, y + height);
-    gradient.addColorStop(0, item.color + '20'); // 10% 透明度
-    gradient.addColorStop(1, item.color + '08');
+    gradient.addColorStop(0, this.hexToRgba(item.color, 0.13)); // 13% 透明度
+    gradient.addColorStop(1, this.hexToRgba(item.color, 0.03));
 
     this.drawRoundRect(ctx, x, y, width, height, 20, gradient);
 
     // 卡片边框 - 发光效果
-    ctx.strokeStyle = item.color + '40';
+    ctx.strokeStyle = this.hexToRgba(item.color, 0.25);
     ctx.lineWidth = 2;
     ctx.stroke();
 

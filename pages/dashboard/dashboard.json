@@ -3,6 +3,5 @@
   "navigationBarTitleText": "我的打卡",
   "navigationBarBackgroundColor": "#0a0e27",
   "navigationBarTextStyle": "white",
-  "backgroundColor": "#0a0e27",
-  "enableShareTimeline": true
+  "backgroundColor": "#0a0e27"
 }

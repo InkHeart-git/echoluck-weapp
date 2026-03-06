@@ -3,6 +3,5 @@
   "navigationBarTitleText": "记录目标",
   "navigationBarBackgroundColor": "#1e293b",
   "navigationBarTextStyle": "white",
-  "backgroundColor": "#0f172a",
-  "enableShareTimeline": true
+  "backgroundColor": "#0f172a"
 }
