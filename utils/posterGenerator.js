@@ -574,13 +574,13 @@ class PosterGenerator {
 
     ctx.save();
 
-    // 绘制长条卡片背景（圆角矩形）
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    // 绘制长条卡片背景（圆角矩形）- 使用深色背景让二维码文字清晰可见
+    ctx.fillStyle = 'rgba(26, 31, 58, 0.95)'; // 深蓝背景，不透明度高
     this.drawRoundRect(ctx, cardX, cardY, cardWidth, cardHeight, cornerRadius, ctx.fillStyle);
     ctx.fill();
 
-    // 绘制卡片边框
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    // 绘制卡片边框 - 细白边增加层次感
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -602,7 +602,7 @@ class PosterGenerator {
 
     // 右侧二维码区域（使用原图尺寸，限制最大高度）
     const maxQrHeight = 120;
-    const qrX = cardX + cardWidth - 290; // 再向左移动约2cm (75rpx)
+    const qrX = cardX + cardWidth - 328; // 再向左移动1cm (37.5rpx)
     const qrY = cardY + (cardHeight - maxQrHeight) / 2;
 
     if (qrCodePath) {
