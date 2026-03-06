@@ -602,7 +602,7 @@ class PosterGenerator {
 
     // 右侧二维码区域（使用原图尺寸，限制最大高度）
     const maxQrHeight = 120;
-    const qrX = cardX + cardWidth - 140;
+    const qrX = cardX + cardWidth - 215; // 向左移动约2cm (75rpx)
     const qrY = cardY + (cardHeight - maxQrHeight) / 2;
 
     if (qrCodePath) {
