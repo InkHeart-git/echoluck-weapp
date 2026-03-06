@@ -565,27 +565,51 @@ class PosterGenerator {
    * @returns {Promise} 绘制完成的Promise
    */
   async drawFooter(ctx, qrCodePath = null, canvas = null) {
-    const y = 1000;
+    const y = 980;
+    const cardX = 60;
+    const cardY = y;
+    const cardWidth = 630;
+    const cardHeight = 140;
+    const cornerRadius = 20;
 
     ctx.save();
 
-    // 左侧宣传语
-    ctx.font = 'bold 36px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    // 绘制长条卡片背景（圆角矩形）
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    this.drawRoundRect(ctx, cardX, cardY, cardWidth, cardHeight, cornerRadius, ctx.fillStyle);
+    ctx.fill();
+
+    // 绘制卡片边框
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // 左侧文字区域
+    const textX = cardX + 30;
+    const textY = cardY + cardHeight / 2;
+
+    // 小程序名称
+    ctx.font = 'bold 32px sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText('我的愿望打卡本', 60, y);
+    ctx.fillText('我的愿望打卡本', textX, textY - 15);
 
-    ctx.font = '28px sans-serif';
+    // 扫码提示
+    ctx.font = '24px sans-serif';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.fillText('扫码使用小程序', 60, y + 50);
-    ctx.fillText('记录生活小确幸', 60, y + 90);
+    ctx.fillText('长按识别 · 开启打卡之旅', textX, textY + 25);
 
-    // 右侧二维码（长方形）
-    const qrWidth = 180;
-    const qrHeight = 180;
-    const qrX = 530;
-    const qrY = y - 40;
+    // 右侧二维码区域（横向长方形）
+    const qrWidth = 120;
+    const qrHeight = 120;
+    const qrX = cardX + cardWidth - qrWidth - 20;
+    const qrY = cardY + (cardHeight - qrHeight) / 2;
+
+    // 二维码背景（白色圆角）
+    ctx.fillStyle = '#FFFFFF';
+    this.drawRoundRect(ctx, qrX - 5, qrY - 5, qrWidth + 10, qrHeight + 10, 12, '#FFFFFF');
+    ctx.fill();
 
     if (qrCodePath) {
       try {
@@ -604,19 +628,20 @@ class PosterGenerator {
           ctx.drawImage(qrCodePath, qrX, qrY, qrWidth, qrHeight);
           console.log('[PosterGenerator] 旧版 Canvas 二维码绘制成功, 路径:', qrCodePath);
         }
-
-        // 绘制白色细边框（可选装饰）
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(qrX - 2, qrY - 2, qrWidth + 4, qrHeight + 4);
-
       } catch (e) {
         console.error('[PosterGenerator] 绘制二维码图片失败:', e);
-        this.drawQRFallback(ctx, qrX, qrY, qrWidth, qrHeight);
+        // 绘制占位符
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(qrX, qrY, qrWidth, qrHeight);
       }
     } else {
       // 绘制占位符
-      this.drawQRFallback(ctx, qrX, qrY, qrWidth, qrHeight);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(qrX, qrY, qrWidth, qrHeight);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+      ctx.font = '20px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('QR', qrX + qrWidth / 2, qrY + qrHeight / 2);
     }
 
     ctx.restore();
