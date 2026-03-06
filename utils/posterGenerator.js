@@ -600,19 +600,26 @@ class PosterGenerator {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
     ctx.fillText('长按识别 · 开启打卡之旅', textX, textY + 25);
 
-    // 右侧二维码区域（横向长方形）
-    const qrWidth = 120;
-    const qrHeight = 120;
-    const qrX = cardX + cardWidth - qrWidth - 20;
-    const qrY = cardY + (cardHeight - qrHeight) / 2;
-
-    // 二维码背景（白色圆角）
-    ctx.fillStyle = '#FFFFFF';
-    this.drawRoundRect(ctx, qrX - 5, qrY - 5, qrWidth + 10, qrHeight + 10, 12, '#FFFFFF');
-    ctx.fill();
+    // 右侧二维码区域（使用原图尺寸，限制最大高度）
+    const maxQrHeight = 120;
+    const qrX = cardX + cardWidth - 140;
+    const qrY = cardY + (cardHeight - maxQrHeight) / 2;
 
     if (qrCodePath) {
       try {
+        // 先获取图片信息以确定原始尺寸
+        const imgInfo = await this.getImageInfo(qrCodePath);
+        const originalWidth = imgInfo.width;
+        const originalHeight = imgInfo.height;
+        
+        // 计算缩放比例，保持原比例，最大高度不超过maxQrHeight
+        const scale = Math.min(1, maxQrHeight / originalHeight);
+        const qrWidth = originalWidth * scale;
+        const qrHeight = originalHeight * scale;
+        
+        // 垂直居中
+        const finalQrY = cardY + (cardHeight - qrHeight) / 2;
+
         // Canvas 2D 需要先加载图片
         if (canvas && canvas.createImage) {
           const img = canvas.createImage();
@@ -621,27 +628,27 @@ class PosterGenerator {
             img.onerror = (e) => reject(new Error('图片加载失败: ' + qrCodePath));
             img.src = qrCodePath;
           });
-          ctx.drawImage(img, qrX, qrY, qrWidth, qrHeight);
-          console.log('[PosterGenerator] Canvas 2D 二维码绘制成功');
+          ctx.drawImage(img, qrX, finalQrY, qrWidth, qrHeight);
+          console.log('[PosterGenerator] Canvas 2D 二维码绘制成功，原尺寸:', originalWidth, 'x', originalHeight);
         } else {
           // 旧版 Canvas 直接用路径
-          ctx.drawImage(qrCodePath, qrX, qrY, qrWidth, qrHeight);
-          console.log('[PosterGenerator] 旧版 Canvas 二维码绘制成功, 路径:', qrCodePath);
+          ctx.drawImage(qrCodePath, qrX, finalQrY, qrWidth, qrHeight);
+          console.log('[PosterGenerator] 旧版 Canvas 二维码绘制成功，原尺寸:', originalWidth, 'x', originalHeight);
         }
       } catch (e) {
         console.error('[PosterGenerator] 绘制二维码图片失败:', e);
-        // 绘制占位符
+        // 使用默认尺寸绘制占位符
         ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-        ctx.fillRect(qrX, qrY, qrWidth, qrHeight);
+        ctx.fillRect(qrX, qrY, 120, 120);
       }
     } else {
       // 绘制占位符
       ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.fillRect(qrX, qrY, qrWidth, qrHeight);
+      ctx.fillRect(qrX, qrY, 120, 120);
       ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
       ctx.font = '20px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('QR', qrX + qrWidth / 2, qrY + qrHeight / 2);
+      ctx.fillText('QR', qrX + 60, qrY + 60);
     }
 
     ctx.restore();
