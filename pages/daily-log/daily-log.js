@@ -1,6 +1,6 @@
 // pages/daily-log/daily-log.js - 优化版
 const { getTaskTypeList, getTaskType, getTaskActions } = require('../../utils/taskTypes.js');
-const { calculateDailyScore, getEvaluationQuestions, getEncouragement } = require('../../utils/dailyTaskEval.js');
+const { calculateDailyScore, getEvaluationQuestions, getEncouragement, getScoreExplanation } = require('../../utils/dailyTaskEval.js');
 const { getLocalDateString } = require('../../utils/dateHelper.js');
 
 Page({
@@ -247,11 +247,41 @@ Page({
     });
   },
 
-  // 计算得分
+  // 计算得分（增强版 - 智能评分）
   calculateScore() {
-    const score = calculateDailyScore(this.data.selectedTaskType, this.data.answers);
+    const app = getApp();
+    const { selectedTaskType, answers, description } = this.data;
+    
+    // 获取连续打卡天数
+    const streakDays = app.globalData.streak?.current || 0;
+    
+    // 获取今天已完成的任务类型（简化处理，实际应从存储中读取）
+    const todayCompletedTypes = this.getTodayCompletedTypes();
+    
+    const score = calculateDailyScore(
+      selectedTaskType, 
+      answers, 
+      description,
+      streakDays,
+      todayCompletedTypes
+    );
+    
     this.setData({ todayScore: score });
     return score;
+  },
+  
+  // 获取今天已完成的任务类型
+  getTodayCompletedTypes() {
+    const { capsuleId } = this.data;
+    const capsules = wx.getStorageSync('echoluck_capsules') || [];
+    const capsule = capsules.find(c => c.id === capsuleId);
+    
+    if (!capsule || !capsule.dailyLogs) return [];
+    
+    const today = new Date().toISOString().split('T')[0];
+    const todayLogs = capsule.dailyLogs.filter(log => log.date === today);
+    
+    return todayLogs.map(log => log.taskType);
   },
 
   // 下一步
@@ -400,6 +430,18 @@ Page({
 
     // 获取鼓励语
     const encouragement = getEncouragement(app.globalData.streak.current, app.globalData.totalPoints);
+    
+    // 获取评分解释
+    const { description, selectedTaskType, answers } = this.data;
+    const streakDays = app.globalData.streak?.current || 0;
+    const todayCompletedTypes = this.getTodayCompletedTypes();
+    
+    // 计算各项加成
+    const keywordBonus = this.calculateKeywordBonus(description);
+    const streakMultiplier = this.getStreakMultiplier(streakDays);
+    const comboBonus = this.calculateComboBonus(selectedTaskType, todayCompletedTypes);
+    
+    const scoreExplanations = getScoreExplanation(todayScore, keywordBonus, streakMultiplier, comboBonus);
 
     // 延迟后显示结果
     setTimeout(() => {
@@ -412,17 +454,82 @@ Page({
           wx.navigateBack();
         }, 2000);
       } else {
+        // 构建详细得分信息
+        let content = `${encouragement}\n\n`;
+        content += `📊 今日得分：+${todayScore} 分\n`;
+        
+        // 添加评分解释
+        if (scoreExplanations.length > 0) {
+          content += `\n✨ 加分详情：\n`;
+          scoreExplanations.forEach(exp => {
+            content += `   ${exp}\n`;
+          });
+        }
+        
+        content += `\n📈 当前进度：${updatedCapsule.currentPoints}/${updatedCapsule.points} (${updatedCapsule.progress}%)\n`;
+        content += `🔥 连续打卡：${app.globalData.streak.current} 天`;
+        
         wx.showModal({
           title: '打卡成功！🎉',
-          content: `${encouragement}\n\n今日获得 +${todayScore} 积分\n当前进度：${updatedCapsule.currentPoints}/${updatedCapsule.points} (${updatedCapsule.progress}%)\n\n连续打卡：${app.globalData.streak.current} 天`,
-          showCancel: false,
-          confirmText: '太棒了',
-          success: () => {
-            wx.navigateBack();
+          content: content,
+          showCancel: true,
+          cancelText: '返回',
+          confirmText: '分享海报',
+          success: (res) => {
+            if (res.confirm) {
+              // 跳转到海报页面
+              this.showPoster();
+            } else {
+              wx.navigateBack();
+            }
           }
         });
       }
     }, 1500);
+  },
+  
+  // 计算关键词加分（用于显示）
+  calculateKeywordBonus(description) {
+    if (!description) return 0;
+    const keywords = ['坚持', '连续', '突破', '克服', '感动', '有意义', '帮助'];
+    let bonus = 0;
+    keywords.forEach(word => {
+      if (description.includes(word)) bonus += 5;
+    });
+    return Math.min(20, bonus);
+  },
+  
+  // 获取连续打卡加成
+  getStreakMultiplier(streakDays) {
+    if (streakDays >= 30) return 1.30;
+    if (streakDays >= 14) return 1.20;
+    if (streakDays >= 7) return 1.10;
+    if (streakDays >= 3) return 1.05;
+    return 1.00;
+  },
+  
+  // 计算组合加分
+  calculateComboBonus(currentType, todayCompletedTypes) {
+    if (!todayCompletedTypes || todayCompletedTypes.length === 0) return 0;
+    
+    let bonus = 0;
+    const hasType = (type) => todayCompletedTypes.includes(type);
+    
+    if ((currentType === 'exercise' && hasType('selfcare')) ||
+        (currentType === 'selfcare' && hasType('exercise'))) {
+      bonus += 8;
+    }
+    
+    if ((currentType === 'read' && hasType('create')) ||
+        (currentType === 'create' && hasType('read'))) {
+      bonus += 10;
+    }
+    
+    const allTypes = [...new Set([...todayCompletedTypes, currentType])];
+    if (allTypes.length >= 3) bonus += 15;
+    if (allTypes.length >= 5) bonus += 20;
+    
+    return bonus;
   },
 
   // 显示完成对话框
@@ -487,5 +594,28 @@ Page({
     setTimeout(() => {
       wx.switchTab({ url: '/pages/dashboard/dashboard' });
     }, 1500);
+  },
+  
+  // 显示海报分享
+  showPoster() {
+    const { taskType, selectedActions, description, todayScore, capsule } = this.data;
+    const app = getApp();
+    
+    const actionsStr = encodeURIComponent(JSON.stringify(selectedActions.map(a => ({
+      name: a.name,
+      icon: a.icon
+    }))));
+    
+    wx.navigateTo({
+      url: `/pages/poster/poster?` +
+        `capsuleName=${encodeURIComponent(capsule?.wish || '我的愿望打卡本')}` +
+        `&taskTypeName=${encodeURIComponent(taskType?.name || '日常打卡')}` +
+        `&taskTypeIcon=${encodeURIComponent(taskType?.icon || '✨')}` +
+        `&taskTypeColor=${encodeURIComponent(taskType?.color || '#6366f1')}` +
+        `&actions=${actionsStr}` +
+        `&description=${encodeURIComponent(description)}` +
+        `&score=${todayScore}` +
+        `&date=${new Date().toISOString().split('T')[0]}`
+    });
   }
 });

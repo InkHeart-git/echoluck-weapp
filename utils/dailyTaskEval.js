@@ -147,8 +147,8 @@ const EVALUATION_CRITERIA = {
   }
 };
 
-// 计算单次行动的分数
-function calculateDailyScore(taskType, answers) {
+// 计算单次行动的分数（增强版 - 智能评分）
+function calculateDailyScore(taskType, answers, description = '', streakDays = 0, todayCompletedTypes = []) {
   const criteria = EVALUATION_CRITERIA[taskType];
   if (!criteria) return 10; // 默认分数
   
@@ -168,8 +168,139 @@ function calculateDailyScore(taskType, answers) {
   // 基础分 + 实际得分
   const baseScore = 5;
   const normalizedScore = Math.round((totalScore / maxPossible) * 30);
+  let finalScore = baseScore + normalizedScore;
   
-  return baseScore + normalizedScore;
+  // ===== 智能加分项 =====
+  
+  // 1. 关键词语义分析加分
+  const keywordBonus = analyzeKeywords(description);
+  finalScore += keywordBonus;
+  
+  // 2. 连续打卡加成
+  const streakMultiplier = getStreakMultiplier(streakDays);
+  finalScore = Math.round(finalScore * streakMultiplier);
+  
+  // 3. 组合任务加分
+  const comboBonus = calculateComboBonus(taskType, todayCompletedTypes);
+  finalScore += comboBonus;
+  
+  // 确保分数在合理范围内
+  return Math.min(100, Math.max(5, finalScore));
+}
+
+// 关键词语义分析
+function analyzeKeywords(description) {
+  if (!description || description.length < 5) return 0;
+  
+  const keywords = {
+    // 坚持类（+5分）
+    '坚持': 5, '每天': 3, '连续': 5, '习惯': 3, '自律': 5,
+    // 情感类（+5分）
+    '感动': 5, '温暖': 4, '开心': 3, '幸福': 4, '满足': 3,
+    // 意义类（+5分）
+    '有意义': 5, '价值': 4, '成长': 4, '进步': 4, '收获': 3,
+    // 挑战类（+8分）
+    '困难': 8, '挑战': 8, '突破': 10, '克服': 8, '战胜': 8,
+    // 突破类（+10分）
+    '第一次': 5, '从未': 6, '突破自己': 10, '超越': 8, '蜕变': 10,
+    // 影响类（+5分）
+    '帮助': 5, '影响': 4, '改变': 5, '启发': 5, '鼓励': 4
+  };
+  
+  let bonus = 0;
+  let matchedKeywords = [];
+  
+  for (const [word, points] of Object.entries(keywords)) {
+    if (description.includes(word)) {
+      bonus += points;
+      matchedKeywords.push(word);
+    }
+  }
+  
+  // 关键词最多加20分
+  return Math.min(20, bonus);
+}
+
+// 连续打卡加成系数
+function getStreakMultiplier(streakDays) {
+  if (streakDays >= 30) return 1.30; // +30%
+  if (streakDays >= 21) return 1.25; // +25%
+  if (streakDays >= 14) return 1.20; // +20%
+  if (streakDays >= 7) return 1.10;  // +10%
+  if (streakDays >= 3) return 1.05;  // +5%
+  return 1.00;
+}
+
+// 组合任务加分
+function calculateComboBonus(currentType, todayCompletedTypes) {
+  if (!todayCompletedTypes || todayCompletedTypes.length === 0) return 0;
+  
+  let bonus = 0;
+  
+  // 健康生活组合：运动 + 自我关怀
+  if (currentType === 'exercise' && todayCompletedTypes.includes('selfcare')) {
+    bonus += 8;
+  }
+  if (currentType === 'selfcare' && todayCompletedTypes.includes('exercise')) {
+    bonus += 8;
+  }
+  
+  // 学习成长组合：阅读 + 创作
+  if (currentType === 'read' && todayCompletedTypes.includes('create')) {
+    bonus += 10;
+  }
+  if (currentType === 'create' && todayCompletedTypes.includes('read')) {
+    bonus += 10;
+  }
+  
+  // 社会责任组合：公益 + 环保
+  if (currentType === 'donate' && todayCompletedTypes.includes('eco')) {
+    bonus += 8;
+  }
+  if (currentType === 'eco' && todayCompletedTypes.includes('donate')) {
+    bonus += 8;
+  }
+  
+  // 温暖世界组合：帮助他人 + 动物
+  if (currentType === 'help' && todayCompletedTypes.includes('animal')) {
+    bonus += 5;
+  }
+  if (currentType === 'animal' && todayCompletedTypes.includes('help')) {
+    bonus += 5;
+  }
+  
+  // 三类型组合（任意3种不同类型）
+  const allTypes = [...new Set([...todayCompletedTypes, currentType])];
+  if (allTypes.length >= 3) {
+    bonus += 15;
+  }
+  
+  // 全类型大师（5种以上）
+  if (allTypes.length >= 5) {
+    bonus += 20;
+  }
+  
+  return bonus;
+}
+
+// 获取评分解释（新增）
+function getScoreExplanation(score, keywordBonus, streakMultiplier, comboBonus) {
+  const explanations = [];
+  
+  if (keywordBonus > 0) {
+    explanations.push(`📝 描述加分 +${keywordBonus}分`);
+  }
+  
+  if (streakMultiplier > 1) {
+    const percent = Math.round((streakMultiplier - 1) * 100);
+    explanations.push(`🔥 连续打卡加成 +${percent}%`);
+  }
+  
+  if (comboBonus > 0) {
+    explanations.push(`🎯 组合任务 +${comboBonus}分`);
+  }
+  
+  return explanations;
 }
 
 // 获取评估问题
@@ -295,5 +426,6 @@ module.exports = {
   getEvaluationQuestions,
   calculateBonus,
   getEncouragement,
-  EVALUATION_CRITERIA
+  EVALUATION_CRITERIA,
+  getScoreExplanation
 };
